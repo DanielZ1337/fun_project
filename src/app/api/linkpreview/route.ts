@@ -1,10 +1,13 @@
 import axios from "axios";
 import he from "he";
-import {OgPreview} from "@/types/ogPreview";
+import {OgPreview} from "@/types/og-preview";
+import {authOptions} from "@/lib/auth";
+import {getServerSession} from "next-auth";
 
 export async function GET(req: Request) {
     const reqUrl = new URL(req.url);
     let href = reqUrl.searchParams.get("url");
+    const session = await getServerSession(authOptions);
 
     if (!href || href === "") {
         return new Response("No link provided", {status: 400});
@@ -66,9 +69,8 @@ export async function GET(req: Request) {
 
 function findMetaData(property: string, stringToSearch: string) {
     const regex = new RegExp(
-        `<meta(?=.*?content="(.*?)")(?=[^>]*property="${property}").*?>`,
-        ""
-    );
+        `<meta(?=.*?content="(.*?)")(?=[^>]*property="${property}").*?>`
+    )
 
     const match = stringToSearch.match(regex);
 

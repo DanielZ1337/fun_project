@@ -4,7 +4,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {useEffect, useState} from "react";
 import {useTheme} from "next-themes";
 import {motion} from "framer-motion";
-import {Computer, Moon, Sun} from "@/components/Icons";
+import {Computer, Moon, Sun} from "@/components/icons";
 
 const ThemeSwitcher = () => {
     const [mounted, setMounted] = useState(false);
@@ -21,7 +21,7 @@ const ThemeSwitcher = () => {
         <DropdownMenu.Root onOpenChange={setOpen}>
             <DropdownMenu.Trigger
                 className={
-                    "flex outline-none hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 rounded-lg"
+                    "flex outline-none hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 rounded-lg data-[state=open]:bg-neutral-100 dark:data-[state=open]:bg-neutral-900"
                 }
             >
                 <p className={"mr-2"}>Theme</p>
@@ -55,7 +55,7 @@ const ThemeSwitcher = () => {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                    className={"border border-neutral-950/20 dark:border-neutral-50/20 dark:bg-neutral-950 bg-white p-4 rounded-lg mt-4 shadow-xl"}
+                    className={"border border-neutral-950/20 dark:border-neutral-50/20 dark:bg-neutral-950 bg-white p-4 rounded-lg mt-4 shadow-xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95"}
                 >
                     <DropdownMenu.RadioGroup
                         value={theme}
@@ -83,10 +83,10 @@ const ThemeSwitcher = () => {
 ThemeSwitcher.displayName = "ThemeSwitcher";
 
 const Item = ({
-    children,
-    value,
-    ...props
-}: {
+                  children,
+                  value,
+                  ...props
+              }: {
     children: React.ReactNode;
     value: string;
 }) => {

@@ -7,49 +7,66 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger
-} from "@/components/DropdownMenu";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/Avatar";
-import {Dispatch, SetStateAction} from "react";
+} from "@/components/dropdown-menu";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/avatar";
+import {signOut} from "next-auth/react";
+import {Session} from "next-auth";
+import Link from "next/link";
+
+interface Props {
+    session: Session
+}
+
+export const AccountDropdown = ({session}: Props) => {
 
 
-export const AccountDropdown = ({setIsLogged}:{setIsLogged:Dispatch<SetStateAction<boolean>>}) => (
-    <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-            <Avatar>
-                <AvatarImage src="https://github.com/danielz1337.png" alt="@danielz1337"/>
-                <AvatarFallback>D</AvatarFallback>
-            </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
-            <DropdownMenuSeparator/>
-            <DropdownMenuGroup>
+    return (
+        <DropdownMenu modal={false}>
+            <DropdownMenuTrigger className={"cursor-pointer"} asChild>
+                <Avatar>
+                    <AvatarImage src={session.user?.image!} alt={`@${session.user?.name}`}/>
+                    <AvatarFallback>D</AvatarFallback>
+                </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator/>
+                <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                        Profile
+                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Billing
+                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Settings
+                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                        Keyboard shortcuts
+                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator/>
                 <DropdownMenuItem>
-                    Profile
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                    <Link href={`https://github.com/${session.user?.name}`}>
+                        GitHub
+                    </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Billing
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem onClick={() => signOut({
+                    redirect: false,
+                }).then(() => {
+                    window.location.reload()
+                })}>
+                    Log out
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Settings
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    Keyboard shortcuts
-                    <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator/>
-            <DropdownMenuItem>GitHub</DropdownMenuItem>
-            <DropdownMenuSeparator/>
-            <DropdownMenuItem onClick={() => setIsLogged(false)}>
-                Log out
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-            </DropdownMenuItem>
-        </DropdownMenuContent>
-    </DropdownMenu>
-)
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
+}
 
 AccountDropdown.displayName = "AccountDropdown"

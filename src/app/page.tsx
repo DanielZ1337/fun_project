@@ -1,7 +1,10 @@
-import {GitHub, Obsidian} from "@/components/Icons";
-import RepositoryForm from "@/components/RepositoryForm";
+import {GitHub, Obsidian} from "@/components/icons";
+import RepositoryForm from "@/components/repository-form";
+import {getServerSession} from "next-auth";
 
-export default function Home() {
+export default async function Home() {
+    const session = await getServerSession()
+
     return (
         <div className={"text-center flex flex-col flex-1 items-center justify-center gap-6"}>
             <div>

@@ -18,9 +18,9 @@ interface ComponentTypes {
 }
 
 function ParseMarkdown({
-    code,
-    codeCopyable = false,
-}: {
+                           code,
+                           codeCopyable = false,
+                       }: {
     code: string;
     codeCopyable?: boolean;
 }) {
@@ -120,8 +120,8 @@ function ParseMarkdown({
         ),
         img: ({className, alt, src, ...props}: ComponentTypes) => (
             <img
-                className={cn("my-2 inline-flex rounded-md border", className)}
-                src={src}
+                className={cn("w-full h-auto my-2 inline-flex rounded-md border object-contain", className)}
+                src={src.startsWith("http") ? src : `/${src}`}
                 alt={alt}
                 {...props}
             />

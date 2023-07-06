@@ -2,15 +2,12 @@
 
 import ThemeSwitcher from "@/components/theme-switcher";
 import Link from "next/link";
-import {GitHub, Home} from "@/components/Icons";
+import {GitHub, Home} from "@/components/icons";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import links from "@/lib/links.json" assert {type: "json"};
-import {AccountDropdown} from "@/components/account-dropdown";
-import {useState} from "react";
-import Button from "@/components/Button";
+import NavbarSessionIndicator from "@/components/navbar-session-indicator";
 
 const Navbar = () => {
-    const [isLogged, setIsLogged] = useState(false);
 
     return (
         <div className={"mb-8"}>
@@ -48,12 +45,7 @@ const Navbar = () => {
                         </Link>
                     </Tip>
                     <ThemeSwitcher/>
-                    {isLogged && <AccountDropdown setIsLogged={setIsLogged} />}
-                    {!isLogged && (
-                        <Button className={"rounded-md p-2"} onClick={() => setIsLogged(true)}>
-                            Login
-                        </Button>
-                    )}
+                    <NavbarSessionIndicator/>
                 </div>
             </div>
         </div>

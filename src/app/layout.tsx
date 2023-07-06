@@ -1,22 +1,45 @@
 import "./globals.css";
 import {Inter} from "next/font/google";
-import {Toaster} from "@/components/Toaster";
-import Navbar from "@/components/Navbar";
+import {Toaster} from "@/components/toaster";
+import Navbar from "@/components/navbar";
 import Link from "next/link";
 import links from "@/lib/links.json" assert {type: "json"};
-import Providers from "@/components/Providers";
+import Providers from "@/components/providers";
 import {cn} from "@/lib/utils";
 
 const inter = Inter({subsets: ["latin"]});
 
 export const metadata = {
-    title: "GitHub Repository Browser",
+    title: {
+        template: "%s | GitHub Repository Browser",
+        default: "GitHub Repository Browser",
+    },
     description: "Browse GitHub repositories with ease",
+    themeColor: [
+        {media: '(prefers-color-scheme: light)', color: 'white'},
+        {media: '(prefers-color-scheme: dark)', color: 'black'},
+    ],
+    openGraph: {
+        type: "website",
+        locale: "en_US",
+        url: "https://github-repo-browser.vercel.app/",
+        siteName: "GitHub Repository Browser",
+        title: "GitHub Repository Browser",
+        description: "Browse GitHub repositories with ease",
+        images: [
+            {
+                url: "http://localhost:3000/api/og",
+                width: 1200,
+                height: 600,
+                alt: "GitHub Repository Browser",
+            },
+        ],
+    }
 };
 
 export default function RootLayout({
-    children,
-}: {
+                                       children,
+                                   }: {
     children: React.ReactNode;
 }) {
     return (
@@ -39,7 +62,8 @@ export default function RootLayout({
                 </div>
             </div>
             <footer className={"text-center -mb-8 mt-3 text-neutral-500"}>
-                Built with ❤️ by <Link href={links.TWITTER} className={"underline focus:outline-purple-500 outline-none rounded-md"}>
+                Built with ❤️ by <Link href={links.TWITTER}
+                                       className={"underline focus:outline-purple-500 outline-none rounded-md"}>
                 Daniel Bermann Schmidt</Link>
             </footer>
             <div className={"absolute left-0 top-0"}>

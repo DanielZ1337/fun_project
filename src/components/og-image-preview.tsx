@@ -3,9 +3,13 @@ import Link from "next/link";
 import {useToast} from "@/hooks/useToast";
 import {useOgPreview} from "@/hooks/useOgPreview";
 import {useEffect, useRef} from "react";
-import {Spinner} from "@/components/Icons";
+import {Spinner} from "@/components/icons";
 
-const OgImagePreview = ({url}: { url: string }) => {
+interface Props {
+    url: string
+}
+
+const OgImagePreview = ({url}: Props) => {
     const previewRef = useRef<HTMLAnchorElement>(null)
     const {toast} = useToast()
 
@@ -20,7 +24,7 @@ const OgImagePreview = ({url}: { url: string }) => {
             })
         }
 
-        if(!isLoading){
+        if (!isLoading) {
             setTimeout(() => {
                 previewRef.current?.scrollIntoView({behavior: "smooth"})
             }, 200)
