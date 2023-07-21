@@ -6,6 +6,8 @@ import {createRatelimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 3600; // Cache expiration time in seconds (1 hour)
 
+export const runtime = 'edge';
+
 export async function GET(req: Request) {
     const rateLimit = createRatelimiter(redisClient, 20, '60 s');
     const result = await rateLimit.limit('api/repositories');
