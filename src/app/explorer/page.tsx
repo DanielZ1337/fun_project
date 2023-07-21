@@ -11,9 +11,9 @@ export default function Page() {
     const [tree, setTree] = useState<any>()
     const [currentFolder, setCurrentFolder] = useState<any>()
 
-    const {data, isLoading} = useTree('danielz1337', 'test-mds')
+    const {data, isLoading} = useTree('danielz1337', 'vop-exercises')
 
-    const {data: linksMapping, isLoading: isLinkMappingLoading} = useLinkMappings('danielz1337', 'test-mds')
+    const {data: linksMapping, isLoading: isLinkMappingLoading} = useLinkMappings('danielz1337', 'vop-exercises')
     useEffect(() => {
 
         if (data) {

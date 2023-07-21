@@ -1,10 +1,22 @@
 import he from "he";
 import {OgPreview} from "@/types/og-preview";
 import axios from "axios";
+import {redisClient} from "@/lib/redis";
+import {createRatelimiter} from "@/lib/ratelimiter";
 
-export const revalidate = 60 * 60;
+const CACHE_EXPIRATION_TIME = 60 * 60 // 1 hour
 
 export async function GET(req: Request) {
+    const rateLimit = createRatelimiter(redisClient, 5, '10 s');
+    const result = await rateLimit.limit('api/ogpreview');
+
+    if (!result.success) {
+        return new Response(JSON.stringify({
+            error: "Too many requests",
+            resultState: result
+        }), {status: 429});
+    }
+
     const {searchParams} = new URL(req.url);
     let href = searchParams.get("url");
 
@@ -14,6 +26,13 @@ export async function GET(req: Request) {
 
     if (!href.startsWith("http") && !href.startsWith("https")) {
         href = `http://${href}`;
+    }
+
+    // Check if the response is cached in Redis
+    const cachedResponse = await redisClient.get(href);
+
+    if (cachedResponse) {
+        return new Response(JSON.stringify(cachedResponse), {status: 200});
     }
 
     const res = await axios
@@ -35,9 +54,6 @@ export async function GET(req: Request) {
         return new Response("Error fetching link", {status: res.status});
     }
 
-    // const head = res.data.match(/<head>[\S\s]*?<\/head>/)[0];
-
-    // Parse the HTML using regular expressions
     const title = findMetaData("og:title", res.data);
     const description = findMetaData("og:description", res.data);
     const imageUrl = findMetaData("og:image", res.data);
@@ -47,29 +63,32 @@ export async function GET(req: Request) {
     const siteName = findMetaData("og:site_name", res.data);
     const url = findMetaData("og:url", res.data);
 
-    return new Response(
-        JSON.stringify({
-            success: 1,
-            meta: {
-                title,
-                description,
-                siteName,
-                url,
-                image: {
-                    url: imageUrl,
-                    alt: imageAlt,
-                    width: imageWidth,
-                    height: imageHeight,
-                }
-            }
-        } as OgPreview),
-    );
+    const ogPreviewData = {
+        success: 1,
+        meta: {
+            title,
+            description,
+            siteName,
+            url,
+            image: {
+                url: imageUrl,
+                alt: imageAlt,
+                width: imageWidth,
+                height: imageHeight,
+            },
+        },
+    } as OgPreview;
+
+    // Cache the response in Redis
+    await redisClient.setex(href, CACHE_EXPIRATION_TIME, JSON.stringify(ogPreviewData));
+
+    return new Response(JSON.stringify(ogPreviewData), {status: 200});
 }
 
 function findMetaData(property: string, stringToSearch: string) {
     const regex = new RegExp(
         `<meta(?=.*?content="(.*?)")(?=[^>]*property="${property}").*?>`
-    )
+    );
 
     const match = stringToSearch.match(regex);
 

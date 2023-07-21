@@ -1,5 +1,7 @@
 import type {NextAuthOptions} from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
+import {UpstashRedisAdapter} from '@next-auth/upstash-redis-adapter'
+import {redisClient} from "@/lib/redis";
 
 const {GITHUB_ID, GITHUB_SECRET} = process.env
 
@@ -8,6 +10,7 @@ if (!GITHUB_ID || !GITHUB_SECRET || GITHUB_ID.length === 0 || GITHUB_SECRET.leng
 }
 
 export const authOptions: NextAuthOptions = {
+    adapter: UpstashRedisAdapter(redisClient),
     session: {
         strategy: 'jwt',
     },

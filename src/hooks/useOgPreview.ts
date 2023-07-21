@@ -4,7 +4,7 @@ import axios from "axios";
 
 export function useOgPreview(url: string) {
     return useQuery(["og-preview", url], async () => {
-        const {data} = await axios.get(`/api/linkpreview`, {
+        const {data} = await axios.get(`/api/ogpreview`, {
             params: {
                 url
             }
