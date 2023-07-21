@@ -24,7 +24,7 @@ export const metadata = {
     openGraph: {
         type: 'website',
         locale: 'en_US',
-        url: 'https://github-repo-browser.vercel.app/',
+        url: 'https://fun-project-tau.vercel.app/',
         siteName: 'GitHub Repository Browser',
         title: 'GitHub Repository Browser',
         description: 'Browse GitHub repositories with ease',
@@ -48,16 +48,6 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
                 inter.className
             )}
         >
-        <h1>
-            process.env.VERCEL_URL: {process.env.VERCEL_URL}
-        </h1>
-        {process.env.NODE_ENV === 'production' && <h1>
-            <span className={'text-2xl'}>This is a demo version of the app. </span>
-            <Link href={process.env.VERCEL_URL!}
-                  className={'underline focus:outline-purple-500 outline-none rounded-md'}>
-                {process.env.VERCEL_URL}
-            </Link>
-        </h1>}
         <Suspense fallback={null}>
             <NavigationEvents/>
         </Suspense>
