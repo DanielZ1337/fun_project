@@ -6,6 +6,8 @@ import {createRatelimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 60 * 60 // 1 hour
 
+export const runtime = 'edge'
+
 export async function GET(req: Request) {
     const rateLimit = createRatelimiter(redisClient, 5, '10 s');
     const result = await rateLimit.limit('api/ogpreview');
