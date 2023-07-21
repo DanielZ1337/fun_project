@@ -48,6 +48,13 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
                 inter.className
             )}
         >
+        {process.env.NODE_ENV === 'production' && <h1>
+            <span className={'text-2xl'}>This is a demo version of the app. </span>
+            <Link href={process.env.VERCEL_URL!}
+                  className={'underline focus:outline-purple-500 outline-none rounded-md'}>
+                {process.env.VERCEL_URL}
+            </Link>
+        </h1>}
         <Suspense fallback={null}>
             <NavigationEvents/>
         </Suspense>
