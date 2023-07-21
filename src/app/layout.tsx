@@ -30,7 +30,7 @@ export const metadata = {
         description: 'Browse GitHub repositories with ease',
         images: [
             {
-                url: 'http://localhost:3000/api/og',
+                url: `${process.env.NODE_ENV === 'production' ? process.env.VERCEL_URL : 'http://localhost:3000'}/api/og`,
                 width: 1200,
                 height: 600,
                 alt: 'GitHub Repository Browser',
