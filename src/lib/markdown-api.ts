@@ -1,0 +1,186 @@
+import axios from 'axios'
+import {unified} from 'unified'
+import remarkParse from 'remark-parse'
+import remarkRehype from 'remark-rehype'
+import rehypeStringify from 'rehype-stringify'
+// import remarkFrontmatter from 'remark-frontmatter'
+import rehypeHighlight from 'rehype-highlight'
+import RemoveMarkdown from 'remove-markdown'
+import remarkMath from 'remark-math'
+// import rehypeKatex from 'rehype-katex'
+// import rehypeMathjax from 'rehype-mathjax'
+import remarkToc from 'remark-toc'
+import remarkGfm from 'remark-gfm'
+import rehypeSlug from 'rehype-slug'
+import matter from 'gray-matter'
+import moment from 'moment'
+import Post from '@/types/post'
+
+export async function getRawFileFromGitHubApi(owner: string, repo: string, path: string): Promise<string> {
+    const {data} = await axios.get('/api/raw', {
+        params: {
+            owner,
+            repo,
+            path,
+        }
+    })
+
+    return data
+}
+
+export async function getAllPosts(owner: string, repo: string): Promise<Post[]> {
+    const {data} = await axios.get('/api/trees', {
+        params: {
+            owner,
+            repo,
+            recursive: true,
+        }
+    })
+
+    const posts = data.tree
+        .filter((file: any) => file.path.includes('.md'))
+        .map((file: any) => getPost(owner, repo, file.path))
+
+    return Promise.all(posts)
+}
+
+export async function getPost(owner: string, repo: string, path: string): Promise<Post> {
+    const rawFile = await getRawFileFromGitHubApi(owner, repo, path)
+    const {data, content} = matter(rawFile)
+
+    if (data.date) {
+        data.date = moment(new Date(data.date)).toISOString()
+    }
+
+    if (data.updatedAt) {
+        data.updatedAt = moment(new Date(data.updatedAt)).toISOString()
+    }
+
+    // if no title is defined in the metadata, use the filename as title
+    if (!data.title) {
+        // Remove the '.md' extension
+        data.title = path.replace(/\.md$/, '')
+        // if (filename.includes('-') && filename.includes(' ')) {
+        // 	data.title = filename.replace(/-/g, ' ')
+        // 	data.title = data.title.replace(/\w\S*/g, (w: string) => w.replace(/^\w/, (c: string) => c.toUpperCase()))
+        // }
+
+        // if (filename.includes('-')) {
+        // 	data.title = filename.replace(/-/g, ' ')
+        // }
+
+        // if (filename.includes(' ')) {
+        // 	data.title = filename.replace(/\w\S*/g, (w: string) => w.replace(/^\w/, (c: string) => c.toUpperCase()))
+        // }
+
+        // if (!filename.includes('-') && !filename.includes(' ')) {
+        // 	data.title = filename
+        // }
+    }
+
+    if (!data.excerpt) {
+        data.excerpt = RemoveMarkdown(
+            unified()
+                .use(remarkParse)
+                .use(remarkRehype)
+                .use(rehypeStringify)
+                .processSync(content)
+                .toString()
+                .replace(/<[^>]*>?/gm, '')
+        ).substring(0, 500)
+    }
+
+    if (!data.date) {
+        const {data: commit} = await axios.get('/api/commits', {
+            params: {
+                owner,
+                repo,
+                path,
+            },
+        })
+        data.date = commit[0].commit.author.date
+    }
+
+    if (!data.updatedAt) {
+        const {data: commit} = await axios.get('/api/commits', {
+            params: {
+                owner,
+                repo,
+                path,
+            },
+        })
+        data.updatedAt = commit[0].commit.author.date
+    }
+
+    if (!data.author) {
+        const {data: commit} = await axios.get('/api/commits', {
+            params: {
+                owner,
+                repo,
+                path,
+            },
+        })
+        data.author = {
+            name: commit[0].commit.author.name,
+            picture: commit[0].author.avatar_url,
+        }
+    }
+
+    if (content) {
+        const processedContent = await unified()
+            .use(remarkParse)
+            .use(remarkGfm)
+            .use(remarkToc)
+            .use(remarkMath)
+            .use(remarkRehype)
+            .use(rehypeSlug)
+            // .use(rehypeMathjax)
+            .use(rehypeHighlight)
+            .use(rehypeStringify)
+            .process(content)
+
+        data.content = processedContent.toString()
+    }
+
+    return {
+        slug: path.replace(/\.md$/, ''),
+        metadata: {
+            title: data.title,
+            excerpt: data.excerpt,
+            date: data.date,
+            updatedAt: data.updatedAt,
+            author: data.author,
+            tags: data.tags,
+            cover: data.cover,
+            ogImage: data.ogImage,
+        },
+        html: data.content,
+        markdown: content,
+    }
+}
+
+export async function getLinkMappings(owner: string, repo: string) {
+    const linksMapping = new Map<string, string[]>()
+    const postsMapping = new Map((await getAllPosts(owner, repo)).map((i) => [i.slug, i.markdown]))
+    const allSlugs = new Set(postsMapping.keys())
+    postsMapping.forEach((content, slug) => {
+        const mdLink = /\[[^\[\]]+\]\(([^\(\)]+)\)/g
+        const matches = Array.from(content.matchAll(mdLink))
+        const linkSlugs = []
+        for (const m of matches) {
+            const linkSlug = getSlugFromHref(slug, m[1])
+            if (allSlugs.has(linkSlug)) {
+                linkSlugs.push(linkSlug)
+            }
+        }
+        linksMapping.set(slug, linkSlugs)
+    })
+
+    return linksMapping
+}
+
+export function getSlugFromHref(currSlug: string, href: string) {
+    return href.replace(/\.md$/, '')
+    /* console.log(decodeURI(path.join(...currSlug.split(path.sep).slice(0, -1), href)).replace(/\.md$/, ''))
+    return decodeURI(path.join(...currSlug.split(path.sep).slice(0, -1), href)).replace(/\.md$/, '') */
+}

@@ -2,7 +2,7 @@
 
 import ThemeSwitcher from "@/components/theme-switcher";
 import Link from "next/link";
-import {GitHub, Home} from "@/components/icons";
+import {GitHubIcon, HomeIcon} from "@/components/icons";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import links from "@/lib/links.json" assert {type: "json"};
 import NavbarSessionIndicator from "@/components/navbar-session-indicator";
@@ -23,7 +23,7 @@ const Navbar = () => {
                             "-ml-4 sm:ml-0 active:scale-105 transition duration-75 active:bg-neutral-200 dark:active:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 sm:p-3 rounded-2xl focus:outline-2 focus:outline-offset-2 focus:outline-purple-500 outline-none"
                         }
                     >
-                        <Home className={"w-6 h-6"}/>
+                        <HomeIcon className={"w-6 h-6"}/>
                     </Link>
                 </Tip>
                 <div className={"flex items-center gap-2 sm:gap-4 -mr-4 sm:mr-0"}>
@@ -34,14 +34,14 @@ const Navbar = () => {
                                 "rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-purple-500 focus:outline-dashed"
                             }
                         >
-                            <GitHub className={"w-6 h-6"} fill={"#6f42c1"}>
+                            <GitHubIcon className={"w-6 h-6"} fill={"#6f42c1"}>
                                 <animate
                                     attributeName="fill"
                                     dur="16s"
                                     values="#6f42c1;purple;#a855f7;purple;#6f42c1"
                                     repeatCount="indefinite"
                                 />
-                            </GitHub>
+                            </GitHubIcon>
                         </Link>
                     </Tip>
                     <ThemeSwitcher/>

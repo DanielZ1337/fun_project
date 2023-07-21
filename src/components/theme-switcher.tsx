@@ -4,7 +4,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {useEffect, useState} from "react";
 import {useTheme} from "next-themes";
 import {motion} from "framer-motion";
-import {Computer, Moon, Sun} from "@/components/icons";
+import {ComputerIcon, MoonIcon, SunIcon} from "@/components/icons";
 
 const ThemeSwitcher = () => {
     const [mounted, setMounted] = useState(false);
@@ -18,7 +18,7 @@ const ThemeSwitcher = () => {
     }
 
     return (
-        <DropdownMenu.Root onOpenChange={setOpen}>
+        <DropdownMenu.Root modal={false} onOpenChange={setOpen}>
             <DropdownMenu.Trigger
                 className={
                     "flex outline-none hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 rounded-lg data-[state=open]:bg-neutral-100 dark:data-[state=open]:bg-neutral-900"
@@ -32,7 +32,11 @@ const ThemeSwitcher = () => {
                     strokeWidth={1.5}
                     stroke="currentColor"
                     className="w-6 h-6"
-                    animate={open ? {rotate: 180} : {rotate: 0}}
+                    animate={open ? {rotate: 0} : {rotate: 180}}
+                    transition={{
+                        duration: 0.2,
+                        ease: "easeInOut",
+                    }}
                 >
                     <motion.path
                         strokeLinecap="round"
@@ -63,15 +67,15 @@ const ThemeSwitcher = () => {
                         className={"flex flex-col gap-2"}
                     >
                         <Item value={"system"}>
-                            <Computer className={"w-6 h-6"}/>
+                            <ComputerIcon/>
                             &nbsp;System
                         </Item>
                         <Item value={"light"}>
-                            <Sun className={"w-6 h-6"}/>
+                            <SunIcon/>
                             &nbsp;Light
                         </Item>
                         <Item value={"dark"}>
-                            <Moon className={"w-6 h-6"}/>
+                            <MoonIcon/>
                             &nbsp;Dark
                         </Item>
                     </DropdownMenu.RadioGroup>
@@ -93,7 +97,7 @@ const Item = ({
     return (
         <DropdownMenu.RadioItem
             className={
-                "dark:bg-neutral-950 p-4 my-0.5 rounded-md flex dark:hover:bg-slate-800 hover:bg-slate-200 outline-offset-2 outline-none focus:outline-purple-500 hover:outline-2 hover:outline-purple-500/50 data-[state=checked]:bg-purple-300 dark:data-[state=checked]:bg-purple-800 transition-colors duration-200 ease-in-out"
+                "dark:bg-neutral-950 p-4 my-0.5 rounded-md flex dark:hover:bg-neutral-800 hover:bg-neutral-200 outline-offset-2 outline-none focus:outline-purple-500 hover:outline-2 hover:outline-purple-500/50 data-[state=checked]:bg-purple-300 dark:data-[state=checked]:bg-purple-800 transition-colors duration-200 ease-in-out"
             }
             value={value}
             {...props}

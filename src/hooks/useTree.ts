@@ -1,0 +1,39 @@
+import {useQuery} from "@tanstack/react-query";
+import axios from "axios";
+
+
+type GitHubTreeItem = {
+    name: string
+    path: string
+    mode: string
+    type: 'blob' | 'tree'
+    sha: string
+    size?: number
+    url: string
+    children?: GitHubTreeItem[]
+}
+
+type GitHubRootTree = {
+    sha: string
+    url: string
+    truncated: boolean
+    children: GitHubTreeItem[]
+}
+
+
+export default function useTree(owner: string, repo: string, recursive: boolean = true) {
+    return useQuery({
+        queryKey: ['github-tree', owner, repo, recursive],
+        queryFn: async () => {
+            const {data} = await axios.get('/api/trees', {
+                params: {
+                    owner,
+                    repo,
+                    recursive: recursive ? recursive : undefined
+                }
+            })
+
+            return data as GitHubRootTree
+        },
+    })
+}

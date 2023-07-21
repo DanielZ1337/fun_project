@@ -6,6 +6,9 @@ const nextConfig = {
                 hostname: "**"
             },
         ],
+    },
+    experimental: {
+        serverActions: true,
     }
 }
 

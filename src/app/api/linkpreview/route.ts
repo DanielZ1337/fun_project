@@ -1,13 +1,12 @@
-import axios from "axios";
 import he from "he";
 import {OgPreview} from "@/types/og-preview";
-import {authOptions} from "@/lib/auth";
-import {getServerSession} from "next-auth";
+import axios from "axios";
+
+export const revalidate = 60 * 60;
 
 export async function GET(req: Request) {
-    const reqUrl = new URL(req.url);
-    let href = reqUrl.searchParams.get("url");
-    const session = await getServerSession(authOptions);
+    const {searchParams} = new URL(req.url);
+    let href = searchParams.get("url");
 
     if (!href || href === "") {
         return new Response("No link provided", {status: 400});

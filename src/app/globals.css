@@ -1,9 +1,57 @@
+@import "nprogress/nprogress.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+
     html {
         -webkit-tap-highlight-color: transparent;
+        margin-left: calc(100vw - 100%);
+        margin-right: 0;
     }
+
+    :root::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        @apply rounded-md
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply rounded-md
+    }
+
+    ::-webkit-scrollbar-thumb {
+        @apply bg-purple-300;
+        @apply hover:bg-purple-400;
+        @apply active:bg-purple-400;
+    }
+
+    .dark::-webkit-scrollbar-thumb {
+        @apply bg-purple-800;
+        @apply hover:bg-purple-900;
+        @apply active:bg-purple-900;
+    }
+
 }
+
+#nprogress .bar {
+    @apply bg-purple-500;
+}
+
+#nprogress .peg {
+    box-shadow: 0 0 10px #d6bcfa, 0 0 5px #d6bcfa;
+}
+
+
+
+
+

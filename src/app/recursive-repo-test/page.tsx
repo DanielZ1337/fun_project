@@ -8,7 +8,7 @@ import RepoFile from "@/lib/RepoFile";
 import {useSession} from "next-auth/react";
 import {useToast} from "@/hooks/useToast";
 import {Breadcrumb, BreadcrumbItem, BreadcrumbLink} from "@/components/breadcrumb";
-import {HomeSolid} from "@/components/icons";
+import {HomeSolidIcon} from "@/components/icons";
 
 export default function Home() {
     const repo = useMemo(() => new RepoTree('/'), []);
@@ -41,7 +41,7 @@ export default function Home() {
             {
                 headers: {
                     Accept: "application/vnd.github+json",
-                    Authorization: `Bearer ${session?.user.token ? session?.user.token : null}`,
+                    Authorization: `Bearer ${session?.user.accessToken ? session?.user.accessToken : null}`,
                     "X-GitHub-Api-Version": "2022-11-28",
                 },
             }
@@ -50,7 +50,7 @@ export default function Home() {
         }).catch((err) => {
             console.log(err)
         });
-    }, [mounted, repo, session?.user.token, toast]);
+    }, [mounted, repo, session?.user.accessToken, toast]);
 
     if (repoTree) {
         /* @ts-ignore */
@@ -84,7 +84,7 @@ export default function Home() {
                             setCurrentFolder(repo._root)
                             setCurrentPath([])
                         }}>
-                            <HomeSolid
+                            <HomeSolidIcon
                                 className={"w-4 h-4 cursor-pointer hover:stroke-current hover:dark:fill-black hover:fill-white"}/>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
