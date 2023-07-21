@@ -48,6 +48,9 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
                 inter.className
             )}
         >
+        <h1>
+            process.env.VERCEL_URL: {process.env.VERCEL_URL}
+        </h1>
         {process.env.NODE_ENV === 'production' && <h1>
             <span className={'text-2xl'}>This is a demo version of the app. </span>
             <Link href={process.env.VERCEL_URL!}
