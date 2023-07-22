@@ -20,7 +20,7 @@ const Navbar = () => {
                     <Link
                         href={"/"}
                         className={
-                            "-ml-4 sm:ml-0 active:scale-105 transition duration-75 active:bg-neutral-200 dark:active:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 sm:p-3 rounded-2xl focus:outline-2 focus:outline-offset-2 focus:outline-purple-500 outline-none"
+                            "-ml-4 sm:ml-0 active:scale-105 transition duration-75 active:bg-neutral-200 dark:active:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 sm:p-3 rounded-md sm:rounded-2xl focus:outline-1 sm:focus:outline-2 focus:outline-offset-1 sm:focus:outline-offset-2 focus:outline-purple-500 outline-none"
                         }
                     >
                         <HomeIcon className={"w-6 h-6"}/>
