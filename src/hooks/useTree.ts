@@ -21,7 +21,7 @@ type GitHubRootTree = {
 }
 
 
-export default function useTree(owner: string, repo: string, recursive: boolean = true) {
+export default function useTree(owner: string, repo: string, recursive: boolean = true, token?: string) {
     return useQuery({
         queryKey: ['github-tree', owner, repo, recursive],
         queryFn: async () => {
@@ -29,9 +29,11 @@ export default function useTree(owner: string, repo: string, recursive: boolean 
                 params: {
                     owner,
                     repo,
-                    recursive: recursive ? recursive : undefined
-                }
+                    recursive,
+                    token,
+                },
             })
+
 
             return data as GitHubRootTree
         },
