@@ -9,7 +9,7 @@ const CACHE_EXPIRATION_TIME = 3600; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {
-        /*const rateLimit = createRateLimiter(redisClient, 10, '10 s');
+        const rateLimit = createRateLimiter(redisClient, 10, '10 s');
         const result = await rateLimit.limit('api/tree');
 
         if (!result.success) {
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
                     'X-RateLimit-Reset': result.reset.toString(),
                 }, status: 429
             });
-        }*/
+        }
 
         const {searchParams} = new URL(req.url);
         const owner = searchParams.get("owner");
@@ -38,11 +38,11 @@ export async function GET(req: Request) {
         const cacheKey = `${owner}-${repo}-${recursive ? "recursive" : "non-recursive"}`;
 
         // Check if the response is cached in Redis
-        /*const cachedResponse = await redisClient.get(cacheKey);
+        const cachedResponse = await redisClient.get(cacheKey);
 
         if (cachedResponse) {
             return new Response(JSON.stringify(cachedResponse), {status: 200});
-        }*/
+        }
 
         const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/git/trees/main?${recursive && 'recursive=1'}`, {
             headers: {
@@ -52,7 +52,7 @@ export async function GET(req: Request) {
         });
 
         // Cache the response in Redis using the SETEX command
-        // await redisClient.setex(cacheKey, CACHE_EXPIRATION_TIME, JSON.stringify(data));
+        await redisClient.setex(cacheKey, CACHE_EXPIRATION_TIME, JSON.stringify(data));
 
         return new Response(JSON.stringify(data as GitHubTreeResponse), {status: 200});
     } catch (error) {

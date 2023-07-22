@@ -8,7 +8,7 @@ const CACHE_EXPIRATION_TIME = 60 * 60 // 1 hour
 
 export async function GET(req: Request) {
     try {
-        /*const rateLimit = createRateLimiter(redisClient, 5, '10 s');
+        const rateLimit = createRateLimiter(redisClient, 5, '10 s');
         const result = await rateLimit.limit('api/ogpreview');
 
         if (!result.success) {
@@ -16,7 +16,7 @@ export async function GET(req: Request) {
                 error: "Too many requests",
                 resultState: result
             }), {status: 429});
-        }*/
+        }
 
         const {searchParams} = new URL(req.url);
         let href = searchParams.get("url");
