@@ -50,9 +50,14 @@ export async function getAllData(owner: string, repo: string, token?: string) {
     const postsWithBackLinks = (await posts).map((post) => {
         return {
             ...post,
-            backLinks: backLinks.get(post.slug)
+            backLinks: {
+                to: backLinks.get(post.slug),
+                from: Array.from(backLinks.entries()).filter(([, links]) => links.includes(post.slug)).map(([slug]) => slug)
+            }
         }
     })
+
+    console.log(postsWithBackLinks)
 
     return postsWithBackLinks
 }
@@ -61,6 +66,7 @@ export async function getAllBackLinks(posts: { slug: string, markdown: string }[
     const linksMapping = new Map<string, string[]>()
     const postsMapping = new Map(posts.map((i) => [i.slug, i.markdown]))
     const allSlugs = new Set(postsMapping.keys())
+
     postsMapping.forEach((content, slug) => {
         const mdLink = /\[[^\[\]]+\]\(((?!http(s)?:\/\/)[^\(\)]+)\)/g
         const matches = Array.from(content.matchAll(mdLink))
