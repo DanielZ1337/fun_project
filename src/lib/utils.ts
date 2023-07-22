@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
+export function getBaseUrl(){
+    return process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process.env.VERCEL_URL!
+}
+
 export const getBase64 = async (content: string) => {
     return JSON.stringify(content).replaceAll(/\\n/g, '').slice(1, -1)
 }
