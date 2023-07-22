@@ -7,6 +7,11 @@ import remarkEmoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
 import {cn} from "@/lib/utils";
 import Link from "next/link";
+import remarkToc from "remark-toc";
+import remarkMath from "remark-math";
+import rehypeHighlight from "rehype-highlight";
+import rehypeMathjax from 'rehype-mathjax'
+
 
 // import CodeBlock from "../code-block"
 
@@ -197,8 +202,8 @@ function ParseMarkdown({
 
     return (
         <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkEmoji]}
-            rehypePlugins={[rehypeRaw, rehypeSlug, rehypeAutolinkHeadings]}
+            remarkPlugins={[remarkGfm, remarkEmoji, remarkToc, remarkMath]}
+            rehypePlugins={[rehypeRaw, rehypeSlug, rehypeAutolinkHeadings, rehypeHighlight, rehypeMathjax]}
             components={components}
         >
             {code}

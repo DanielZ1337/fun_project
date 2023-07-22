@@ -18,6 +18,10 @@ type Post = {
     }
     html: string
     markdown: string
+    backlinks?:{
+        to: string[]
+        from: string[]
+    }
 }
 
 export default Post
