@@ -39,7 +39,7 @@ export default function Page() {
                 getBacklinks()
                 setNoteSearch(e.target.value)
             }} className={"mb-4"}/>
-            <NotesNavigationMenu backlinks={backlinks}/>
+            <NotesNavigationMenu backlinks={backlinks} token={token ? token : undefined}/>
             {noteSearch && data?.filter((note) => note.metadata.title === noteSearch).map((note) => (
                 <div key={note.metadata.title}>
                     <h1>{note.metadata.title}</h1>
