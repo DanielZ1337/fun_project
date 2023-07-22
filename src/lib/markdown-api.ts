@@ -180,7 +180,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             .use(remarkMath)
             .use(remarkRehype)
             .use(rehypeSlug)
-            .use(rehypeMathjax)
+            // .use(rehypeMathjax)
             .use(rehypeHighlight)
             .use(rehypeStringify)
             .process(content)
