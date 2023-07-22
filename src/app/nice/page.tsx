@@ -5,8 +5,12 @@ import {useState} from "react";
 import Input from "@/components/input";
 import ParseMarkdown from "@/components/parse-markdown";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
+import {useSearchParams} from "next/navigation";
 
 export default function Page() {
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
+
     const [noteSearch, setNoteSearch] = useState('')
     const [backlinks, setBacklinks] = useState<{
         title: string
@@ -14,7 +18,7 @@ export default function Page() {
         slug: string
     }[]>()
 
-    const {data, isLoading} = useNotesData('danielz1337', 'test-mds')
+    const {data, isLoading} = useNotesData('danielz1337', 'test-mds', token ? token : undefined)
 
     function getBacklinks() {
         if (data) {
