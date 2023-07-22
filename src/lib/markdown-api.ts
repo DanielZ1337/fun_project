@@ -18,7 +18,7 @@ import moment from "moment";
 import {getBaseUrl} from "@/lib/utils";
 
 export async function getRawFile(owner: string, repo: string, path: string, token?: string): Promise<string> {
-    const {data} = await axios.get(`${getBaseUrl()}/api/raw`, {
+    const {data} = await axios.get(`/api/raw`, {
         params: {
             owner,
             repo,
@@ -31,7 +31,7 @@ export async function getRawFile(owner: string, repo: string, path: string, toke
 }
 
 export async function getAllMarkdownFiles(owner: string, repo: string, token?: string): Promise<GitHubTreeItemResponse[]> {
-    const {data} = await axios.get(`${getBaseUrl()}/api/tree`, {
+    const {data} = await axios.get(`/api/tree`, {
         params: {
             owner,
             repo,
@@ -57,8 +57,6 @@ export async function getAllData(owner: string, repo: string, token?: string) {
             }
         }
     })
-
-    console.log(postsWithBackLinks)
 
     return postsWithBackLinks
 }
@@ -157,7 +155,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
     }
 
     if (!data.date) {
-        const {data: commit} = await axios.get(`${getBaseUrl()}/api/commits`, {
+        const {data: commit} = await axios.get(`/api/commits`, {
             params: {
                 owner,
                 repo,
@@ -169,7 +167,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
     }
 
     if (!data.updatedAt) {
-        const {data: commit} = await axios.get(`${getBaseUrl()}/api/commits`, {
+        const {data: commit} = await axios.get(`/api/commits`, {
             params: {
                 owner,
                 repo,
@@ -181,7 +179,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
     }
 
     if (!data.author) {
-        const {data: commit} = await axios.get(`${getBaseUrl()}/api/commits`, {
+        const {data: commit} = await axios.get(`/api/commits`, {
             params: {
                 owner,
                 repo,
