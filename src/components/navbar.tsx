@@ -7,7 +7,7 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import links from "@/lib/links.json" assert {type: "json"};
 import NavbarSessionIndicator from "@/components/navbar-session-indicator";
 
-const Navbar = () => {
+export default function Navbar() {
 
     return (
         <div className={"mb-8"}>
@@ -20,10 +20,10 @@ const Navbar = () => {
                     <Link
                         href={"/"}
                         className={
-                            "-ml-4 sm:ml-0 active:scale-105 transition duration-75 active:bg-neutral-200 dark:active:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 sm:p-3 rounded-md sm:rounded-2xl focus:outline-1 sm:focus:outline-2 focus:outline-offset-1 sm:focus:outline-offset-2 focus:outline-purple-500 outline-none"
+                            "-ml-4 sm:ml-0 active:scale-105 transition duration-75 active:bg-neutral-200 dark:active:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 p-2 sm:p-3 rounded-lg sm:rounded-2xl focus:outline-1 sm:focus:outline-2 focus:outline-offset-1 sm:focus:outline-offset-2 focus:outline-purple-500 outline-none"
                         }
                     >
-                        <HomeIcon className={"w-6 h-6"}/>
+                        <HomeIcon/>
                     </Link>
                 </Tip>
                 <div className={"flex items-center gap-2 sm:gap-4 -mr-4 sm:mr-0"}>
@@ -34,7 +34,7 @@ const Navbar = () => {
                                 "rounded-full focus:outline-2 focus:outline-offset-2 focus:outline-purple-500 focus:outline-dashed"
                             }
                         >
-                            <GitHubIcon className={"w-6 h-6"} fill={"#6f42c1"}>
+                            <GitHubIcon fill={"#6f42c1"}>
                                 <animate
                                     attributeName="fill"
                                     dur="16s"
@@ -51,7 +51,6 @@ const Navbar = () => {
         </div>
     )
 }
-export default Navbar;
 
 const TipTrigger = ({children}: { children: React.ReactNode }) => (
     <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>

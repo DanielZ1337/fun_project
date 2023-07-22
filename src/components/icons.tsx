@@ -482,7 +482,7 @@ export const Spinner = React.forwardRef<SVGSVGElement, SVGProps>(
         <svg
             viewBox='0 0 24 24'
             xmlns='http://www.w3.org/2000/svg'
-            className={cn('fill-current stroke-current stroke-2 animate-spin w-8 h-8', className)}
+            className={cn('fill-current stroke-current stroke-2 animate-spin w-6 h-6', className)}
             ref={ref}
             {...props}
         >

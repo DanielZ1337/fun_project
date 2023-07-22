@@ -25,7 +25,7 @@ export default function useTree(owner: string, repo: string, recursive: boolean 
     return useQuery({
         queryKey: ['github-tree', owner, repo, recursive],
         queryFn: async () => {
-            const {data} = await axios.get('/api/trees', {
+            const {data} = await axios.get('/api/tree', {
                 params: {
                     owner,
                     repo,

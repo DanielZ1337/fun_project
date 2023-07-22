@@ -22,7 +22,7 @@ export default async function Page({params}: { params: { path: string[] } }) {
     const parsedPaths = params.path.map((value) => encodeURIComponent(value))
 
 
-    const repoTree = (await axios.get(`http://localhost:3000/api/trees/DanielZ1337/Obsidian-SDU/main/${parsedPaths.join('/')}`)).data
+    const repoTree = (await axios.get(`http://localhost:3000/api/tree/DanielZ1337/Obsidian-SDU/main/${parsedPaths.join('/')}`)).data
 
 
     return <>

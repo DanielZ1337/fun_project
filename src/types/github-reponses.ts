@@ -115,14 +115,34 @@ export type GitHubRepositoryResponse = {
 export type GitHubTreeResponse = {
     sha: string
     url: string
-    tree: Array<{
-        path: string
-        mode: string
-        type: string
-        sha: string
-        url: string
-        size?: number
-    }>
+    tree: GitHubTreeItemResponse[]
     truncated: boolean
 }
 
+export type GitHubTreeItemResponse = {
+    path: string
+    mode: string
+    type: string
+    sha: string
+    size?: number
+    url: string
+}
+
+export type GitHubFileResponse = {
+    name: string
+    path: string
+    sha: string
+    size: number
+    url: string
+    html_url: string
+    git_url: string
+    download_url: string
+    type: string
+    content: string
+    encoding: string
+    _links: {
+        self: string
+        git: string
+        html: string
+    }
+}
