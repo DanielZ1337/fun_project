@@ -184,16 +184,19 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
     }
 
     if (content) {
-        // if link is a relative image or media link, replace it with the raw github link
-        const relativeLink = /\((?!http(s)?:\/\/)([^\(\)]+)\)/g
-        const matches = Array.from(content.matchAll(relativeLink))
+        // if a link is in the github repository or a relative link, replace it with the raw github link
+        const repositoryLink = /\((?!http(s)?:\/\/)([^\(\)]+)\)/g
+        const matches = Array.from(content.matchAll(repositoryLink))
         for (const m of matches) {
-            const link = m[2]
-            if (link.includes('.png') || link.includes('.jpg') || link.includes('.jpeg') || link.includes('.gif') || link.includes('.mp4')) {
-                const image = await getImageFromGitHub(owner, repo, link, token)
-                content = content.replace(link, image)
+            // if the link matches a media file (image, video) in the github repository
+            if (m[2].match(/.*\.(png|jpg|jpeg|gif|mp4|webm|ogg|mp3|wav)$/g)) {
+                // take path into consideration (e.g. /posts/2021-01-01-post-name)
+                const filePath = path.split('/').slice(0, -1).join('/')
+                const link = await getImageFromGitHub(owner, repo, `${filePath}/${m[2]}`, token)
+                content = content.replace(m[2], link)
             }
         }
+
 
         const processedContent = await unified()
             .use(remarkParse)
