@@ -191,9 +191,35 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             // if the link matches a media file (image, video) in the github repository
             if (m[2].match(/.*\.(png|jpg|jpeg|gif|mp4|webm|ogg|mp3|wav)$/g)) {
                 // take path into consideration (e.g. /posts/2021-01-01-post-name)
+
+
+                if (m[2].startsWith('/')) {
+                    m[2] = m[2].substring(1)
+                }
+
+                if (m[2].startsWith('./')) {
+                    m[2] = m[2].substring(2)
+                }
+
+                if (m[2].startsWith('../')) {
+                    m[2] = m[2].substring(3)
+                }
+
+                if (m[2].startsWith('..')) {
+                    m[2] = m[2].substring(2)
+                }
+
+                if (m[2].startsWith('.')) {
+                    m[2] = m[2].substring(1)
+                }
+
                 const filePath = path.split('/').slice(0, -1).join('/')
                 const link = await getImageFromGitHub(owner, repo, `${filePath}/${m[2]}`, token)
-                content = content.replace(m[2], link)
+                if (!link) {
+                    throw new Error(`Image ${m[2]} not found in repository ${owner}/${repo}`)
+                } else {
+                    content = content.replace(m[2], link)
+                }
             }
         }
 
