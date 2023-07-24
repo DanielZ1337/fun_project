@@ -16,7 +16,7 @@ export default function NotesNavigationMenu({backlinks, token}: { backlinks: Bac
     const [tree, setTree] = useState<any>()
     const [currentFolder, setCurrentFolder] = useState<any>()
 
-    const {data, isLoading} = useTree('danielz1337', 'test-mds', true, token ? token : undefined)
+    const {data, isLoading} = useTree('danielz1337', 'obsidian-sdu', true, token ? token : undefined)
 
     useEffect(() => {
 

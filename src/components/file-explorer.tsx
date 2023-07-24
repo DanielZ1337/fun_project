@@ -2,6 +2,7 @@
 
 import {useEffect, useState} from "react";
 import useTree from "@/hooks/useTree";
+import {DocumentIcon, FolderClosedIcon, FolderOpenIcon} from "@/components/icons";
 
 type GitHubTreeItem = {
     name: string
@@ -48,8 +49,12 @@ function FileExplorer() {
     )
 }
 
+type NestedItem = {
+    [key: string]: boolean
+}
+
 function RecursiveComponent({data}: any) {
-    const [showNested, setShowNested] = useState({})
+    const [showNested, setShowNested] = useState<NestedItem>({})
 
     useEffect(() => {
         console.log(showNested);
@@ -62,14 +67,17 @@ function RecursiveComponent({data}: any) {
 
     return (
         <div style={{paddingLeft: '20px'}}>
-            {data.children?.map((parent: any) => {
+            {data.children?.map((parent: GitHubTreeItem) => {
                 return (
                     <div key={parent.path}>
                         {/* rendering folders */}
                         {parent.type === 'tree' &&
-                            <button onClick={() => toggleNested(parent.path)}>{parent.name}</button>}
+                            <button className={"flex gap-2"} onClick={() => toggleNested(parent.path)}>
+                                {showNested[parent.path] ? <FolderOpenIcon/> : <FolderClosedIcon/>}
+                                {parent.name}
+                            </button>}
                         {/* rendering files */}
-                        {parent.type === 'blob' && <span>{parent.name}</span>}
+                        {parent.type === 'blob' && <span className={"flex gap-2"}><DocumentIcon/>{parent.name}</span>}
                         {/* @ts-ignore */}
                         <div style={{display: !showNested[parent.path] && 'none'}}>
                             {parent.children && <RecursiveComponent data={parent}/>}

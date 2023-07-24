@@ -9,8 +9,8 @@ import {cn} from "@/lib/utils";
 import Link from "next/link";
 import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
+import axios from "axios";
 import rehypeHighlight from "rehype-highlight";
-import rehypeMathjax from 'rehype-mathjax'
 
 
 // import CodeBlock from "../code-block"
@@ -18,7 +18,6 @@ import rehypeMathjax from 'rehype-mathjax'
 interface ComponentTypes {
     className?: string;
     href?: string;
-
     [key: string]: any;
 }
 
@@ -126,7 +125,7 @@ function ParseMarkdown({
         img: ({className, alt, src, ...props}: ComponentTypes) => (
             <img
                 className={cn("w-full h-auto my-2 inline-flex rounded-md border object-contain", className)}
-                src={src.startsWith("http") ? src : `/${src}`}
+                src={src}
                 alt={alt}
                 {...props}
             />
@@ -203,7 +202,7 @@ function ParseMarkdown({
     return (
         <ReactMarkdown
             remarkPlugins={[remarkGfm, remarkEmoji, remarkToc, remarkMath]}
-            rehypePlugins={[rehypeRaw, rehypeSlug, rehypeAutolinkHeadings, rehypeHighlight]}
+            rehypePlugins={[rehypeRaw, rehypeSlug, rehypeAutolinkHeadings, /*rehypeHighlight*/]}
             components={components}
         >
             {code}

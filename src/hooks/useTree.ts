@@ -37,5 +37,8 @@ export default function useTree(owner: string, repo: string, recursive: boolean 
 
             return data as GitHubRootTree
         },
+        refetchOnWindowFocus: process.env.NODE_ENV !== 'development',
+        refetchOnReconnect: process.env.NODE_ENV !== 'development',
+        refetchOnMount: process.env.NODE_ENV !== 'development',
     })
 }

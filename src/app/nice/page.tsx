@@ -1,14 +1,16 @@
 'use client'
 
 import {useNotesData} from "@/hooks/useNotesData";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Input from "@/components/input";
 import ParseMarkdown from "@/components/parse-markdown";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
 import {useSearchParams} from "next/navigation";
+import {useSession} from "next-auth/react";
 
 export default function Page() {
     const searchParams = useSearchParams()
+    const {data:session} = useSession()
     const token = searchParams.get('token')
 
     const [noteSearch, setNoteSearch] = useState('')
@@ -18,7 +20,10 @@ export default function Page() {
         slug: string
     }[]>()
 
-    const {data, isLoading} = useNotesData('danielz1337', 'test-mds', token ? token : undefined)
+    const owner = 'danielz1337'
+    const repo = 'obsidian-sdu'
+
+    const {data, isLoading} = useNotesData(owner, repo, token ? token : undefined)
 
     function getBacklinks() {
         if (data) {
@@ -33,6 +38,10 @@ export default function Page() {
         }
     }
 
+    useEffect(() => {
+        setNoteSearch('2. semester/Data Management/Normalization')
+    }, [data])
+
     return (
         <>
             <Input type="text" value={noteSearch} onChange={(e) => {
@@ -40,7 +49,7 @@ export default function Page() {
                 setNoteSearch(e.target.value)
             }} className={"mb-4"}/>
             <NotesNavigationMenu backlinks={backlinks} token={token ? token : undefined}/>
-            {noteSearch && data?.filter((note) => note.metadata.title === noteSearch).map((note) => (
+            {noteSearch && data?.filter((note) => note.slug === noteSearch).map((note) => (
                 <div key={note.metadata.title}>
                     <h1>{note.metadata.title}</h1>
                     <ParseMarkdown code={note.markdown}/>

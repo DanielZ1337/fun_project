@@ -19,39 +19,19 @@ interface Props {
 
 export const AccountDropdown = ({session}: Props) => {
 
-
     return (
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger className={"cursor-pointer"} asChild>
                 <Avatar>
-                    <AvatarImage src={session.user?.image!} alt={`@${session.user?.name}`}/>
-                    <AvatarFallback>D</AvatarFallback>
+                    <AvatarImage src={session.user.image!} alt={`@${session.user.name}`}/>
+                    <AvatarFallback>{session.user.name?.charAt(0).toUpperCase()}</AvatarFallback>
                 </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator/>
-                <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                        Profile
-                        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Billing
-                        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Settings
-                        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        Keyboard shortcuts
-                        <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                <DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem>
-                    <Link href={`https://github.com/${session.user?.name}`}>
+                    <Link href={`https://github.com/${session.user.name}`}>
                         GitHub
                     </Link>
                 </DropdownMenuItem>
@@ -62,7 +42,6 @@ export const AccountDropdown = ({session}: Props) => {
                     window.location.reload()
                 })}>
                     Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

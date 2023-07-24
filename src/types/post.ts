@@ -1,6 +1,6 @@
 import Author from './author'
 
-type Post = {
+export type Post = {
     slug: string
     metadata: {
         title: string

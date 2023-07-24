@@ -1,7 +1,6 @@
 import axios from 'axios'
 // import remarkFrontmatter from 'remark-frontmatter'
 // import rehypeKatex from 'rehype-katex'
-import rehypeMathjax from 'rehype-mathjax'
 import {GitHubTreeItemResponse, GitHubTreeResponse} from "@/types/github-reponses";
 import matter from "gray-matter";
 import RemoveMarkdown from "remove-markdown";
@@ -13,9 +12,21 @@ import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
-import rehypeHighlight from "rehype-highlight";
 import moment from "moment";
 import Post from "@/types/post";
+
+async function getImageFromGitHub(owner: string, repo: string, path: string, token?: string) {
+    const {data} = await axios.get('/api/github', {
+        params: {
+            owner,
+            repo,
+            path,
+            token
+        }
+    })
+
+    return data.download_url
+}
 
 export async function getRawFile(owner: string, repo: string, path: string, token?: string): Promise<string> {
     const {data} = await axios.get(`/api/raw`, {
@@ -89,7 +100,7 @@ export function getSlugFromHref(currSlug: string, href: string) {
 }
 
 export async function rawFileToPost(raw: string, owner: string, repo: string, path: string, token?: string): Promise<Post> {
-    const {data, content} = matter(raw)
+    let {data, content} = matter(raw)
 
     if (data.date) {
         data.date = moment(new Date(data.date)).toISOString()
@@ -173,6 +184,17 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
     }
 
     if (content) {
+        // if link is a relative image or media link, replace it with the raw github link
+        const relativeLink = /\((?!http(s)?:\/\/)([^\(\)]+)\)/g
+        const matches = Array.from(content.matchAll(relativeLink))
+        for (const m of matches) {
+            const link = m[2]
+            if (link.includes('.png') || link.includes('.jpg') || link.includes('.jpeg') || link.includes('.gif') || link.includes('.mp4')) {
+                const image = await getImageFromGitHub(owner, repo, link, token)
+                content = content.replace(link, image)
+            }
+        }
+
         const processedContent = await unified()
             .use(remarkParse)
             .use(remarkGfm)
@@ -181,7 +203,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             .use(remarkRehype)
             .use(rehypeSlug)
             // .use(rehypeMathjax)
-            .use(rehypeHighlight)
+            // .use(rehypeHighlight)
             .use(rehypeStringify)
             .process(content)
 
