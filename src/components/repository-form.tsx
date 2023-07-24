@@ -82,7 +82,10 @@ export default function RepositoryForm() {
                             if (!formUrl.startsWith('https') && !formUrl.startsWith('http')) {
                                 formUrl = `http://${formUrl}`
                             }
-                            router.push(`repository?url=${formUrl}`)
+                            if (formUrl.startsWith('https://github.com')) {
+                                const url = new URL(formUrl)
+                                router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}`)
+                            }
                         }}
                         tabIndex={4}
                     >
