@@ -18,7 +18,7 @@ export type Post = {
     }
     html: string
     markdown: string
-    backlinks?:{
+    backlinks?: {
         to?: string[]
         from?: string[]
     }

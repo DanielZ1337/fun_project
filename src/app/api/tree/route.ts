@@ -1,11 +1,9 @@
 import {authOptions} from "@/lib/auth";
 import {getServerSession} from "next-auth";
 import axios, {AxiosError} from "axios";
-import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 import {GitHubTreeResponse} from "@/types/github-reponses";
 
-const CACHE_EXPIRATION_TIME = 60*60; // Cache expiration time in seconds (1 hour)
+const CACHE_EXPIRATION_TIME = 60 * 60; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {

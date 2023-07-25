@@ -1,8 +1,6 @@
 import he from "he";
 import {OgPreview} from "@/types/og-preview";
 import axios from "axios";
-import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 60 * 60 // 1 hour
 

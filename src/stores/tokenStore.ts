@@ -7,5 +7,5 @@ interface TokenStore {
 
 export const useTokenStore = create<TokenStore>((set) => ({
     token: '',
-    setToken: (token) => set({ token }),
+    setToken: (token) => set({token}),
 }))

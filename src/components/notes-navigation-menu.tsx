@@ -1,9 +1,8 @@
 import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordian";
 import BacklinkNavigationMenuPreview from "@/components/backlink-navigation-menu-preview";
-import {RecursiveComponent} from "@/components/file-explorer";
+import {generateFileExplorer, RecursiveComponent} from "@/components/file-explorer";
 import {useEffect, useState} from "react";
 import useTree from "@/hooks/useTree";
-import {generateFileExplorer} from "@/components/file-explorer";
 
 interface Backlink {
     title: string
@@ -11,7 +10,12 @@ interface Backlink {
     slug: string
 }
 
-export default function NotesNavigationMenu({backlinks, owner, repo, token}: { backlinks: Backlink[] | undefined, owner:string, repo:string,token?: string}) {
+export default function NotesNavigationMenu({backlinks, owner, repo, token}: {
+    backlinks: Backlink[] | undefined,
+    owner: string,
+    repo: string,
+    token?: string
+}) {
 
     const [tree, setTree] = useState<any>()
     const [currentFolder, setCurrentFolder] = useState<any>()

@@ -1,5 +1,5 @@
-import { create } from 'zustand'
-import type { Post } from '@/types/post'
+import {create} from 'zustand'
+import type {Post} from '@/types/post'
 
 interface NotesStore {
     fetchedNotes: Post[]
@@ -10,7 +10,7 @@ interface NotesStore {
 
 export const useNotesStore = create<NotesStore>((set) => ({
     fetchedNotes: [],
-    setFetchedNotes: (fetchedNotes) => set({ fetchedNotes }),
-    addFetchedNotes: (fetchedNotes) => set((state) => ({ fetchedNotes: [...state.fetchedNotes, ...fetchedNotes] })),
-    clearFetchedNotes: () => set({ fetchedNotes: [] }),
+    setFetchedNotes: (fetchedNotes) => set({fetchedNotes}),
+    addFetchedNotes: (fetchedNotes) => set((state) => ({fetchedNotes: [...state.fetchedNotes, ...fetchedNotes]})),
+    clearFetchedNotes: () => set({fetchedNotes: []}),
 }))

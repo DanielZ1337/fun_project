@@ -1,6 +1,5 @@
 'use client'
 
-import {GitHubRepositoryResponse} from "@/types/github-reponses";
 import Link from "next/link";
 import {useRepositoriesWithUsername} from "@/hooks/useRepositories";
 

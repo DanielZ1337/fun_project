@@ -61,7 +61,7 @@ export default function Page() {
 }
 */
 
-export default function TempPage(){
+export default function TempPage() {
     return (
         <div>Temp Page</div>
     )

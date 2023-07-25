@@ -2,7 +2,7 @@ import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
 import axios from "axios";
 
-export async function GET(req: Request){
+export async function GET(req: Request) {
     const {searchParams} = new URL(req.url);
     const owner = searchParams.get("owner");
     const repo = searchParams.get("repo");

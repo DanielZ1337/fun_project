@@ -10,7 +10,7 @@ import {useSession} from "next-auth/react";
 
 export default function Page() {
     const searchParams = useSearchParams()
-    const {data:session} = useSession()
+    const {data: session} = useSession()
     const token = searchParams.get('token')
 
     const [noteSearch, setNoteSearch] = useState('')

@@ -1,10 +1,8 @@
 import axios, {AxiosError} from "axios";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
-import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
-const CACHE_EXPIRATION_TIME = 60*60; // Cache expiration time in seconds (1 hour)
+const CACHE_EXPIRATION_TIME = 60 * 60; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {

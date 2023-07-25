@@ -1,9 +1,9 @@
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 
-export function useTest(owner:string, repo:string, token?:string) {
+export function useTest(owner: string, repo: string, token?: string) {
     return useQuery(["test", owner, repo, token], async () => {
-        const { data } = await axios.get(`/api/test`);
+        const {data} = await axios.get(`/api/test`);
         return data;
     }, {
         refetchOnWindowFocus: process.env.NODE_ENV !== 'development',

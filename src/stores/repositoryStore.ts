@@ -10,6 +10,6 @@ interface RepositoryStore {
 export const useRepositoryStore = create<RepositoryStore>((set) => ({
     owner: '',
     repository: '',
-    setOwner: (owner) => set({ owner }),
-    setRepository: (repository) => set({ repository }),
+    setOwner: (owner) => set({owner}),
+    setRepository: (repository) => set({repository}),
 }))

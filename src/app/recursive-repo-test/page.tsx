@@ -4,7 +4,7 @@ export default function Home() {
 
     return (
         <>
-           {/* {currentFolder !== repo._root && (
+            {/* {currentFolder !== repo._root && (
                 <p onClick={() => {
                     setCurrentFolder(currentFolder.parent)
                     setCurrentPath(currentPath.slice(0, currentPath.length - 1))
