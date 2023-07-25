@@ -24,7 +24,7 @@ export async function generateMetadata({params, searchParams}:{
             description: `Notes for ${owner}/${repo}`,
             images: [
                 {
-                    url: `/api/og/notes?owner=${owner}&repo=${repo}`,
+                    url: `/api/og?owner=${owner}&repo=${repo}`,
                     width: 1200,
                     height: 630,
                     alt: `${owner}/${repo} - Notes`,
