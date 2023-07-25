@@ -1,3 +1,5 @@
+'use client'
+
 import Image from "next/image";
 import Link from "next/link";
 import {useToast} from "@/hooks/useToast";
@@ -41,18 +43,18 @@ const OgImagePreview = ({url}: Props) => {
                             d="M18 0H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm-5.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.376 10.481A1 1 0 0 1 16 15H4a1 1 0 0 1-.895-1.447l3.5-7A1 1 0 0 1 7.468 6a.965.965 0 0 1 .9.5l2.775 4.757 1.546-1.887a1 1 0 0 1 1.618.1l2.541 4a1 1 0 0 1 .028 1.011Z"/>
                     </svg>
                 </div>
-                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-72"/>
+                <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 sm:w-72 w-full"/>
                 <div className="flex items-center w-full space-x-2">
-                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32"/>
-                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24"/>
+                    <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-1/2 sm:w-32"/>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600s w-1/3 sm:w-24"/>
                     <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-full"/>
                 </div>
                 <div className="flex items-center w-full space-x-2 max-w-[480px]">
                     <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-full"></div>
                     <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-full"></div>
-                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24"></div>
+                    <div className="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-1/3 sm:w-24"></div>
                 </div>
-                <div className={"h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48"}/>
+                <div className={"h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 sm:w-48"}/>
             </div>
         )
     }
@@ -78,8 +80,8 @@ const OgImagePreview = ({url}: Props) => {
             />
 
             <div className={"p-3 text-left break-all"}>
-                <h1 className={"text-xl font-bold text-center mb-2"}>{data.meta.title}</h1>
-                <h3>{data.meta.description}</h3>
+                <h1 className={"sm:text-xl text-base font-bold text-center mb-2"}>{data.meta.title}</h1>
+                <h3 className={"sm:text-base text-sm"}>{data.meta.description}</h3>
                 <Link href={data.meta.url}
                       className={"underline text-blue-500 text-xs"}>{data.meta.url}</Link>
             </div>

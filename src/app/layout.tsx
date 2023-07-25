@@ -32,7 +32,7 @@ export const metadata = {
             {
                 url: '/api/og',
                 width: 1200,
-                height: 600,
+                height: 630,
                 alt: 'GitHub Repository Browser',
             },
         ],
@@ -57,7 +57,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
                     'rounded-2xl container bg-neutral-50 dark:bg-neutral-950 flex flex-col flex-1 drop-shadow-[0px_0px_95px_rgba(59,41,92,0.45)]'
                 }
             >
-                <div className={'m-8 flex flex-col flex-1'}>
+                <div className={'m-8 flex flex-col'}>
                     <Navbar/>
                     {children}
                 </div>

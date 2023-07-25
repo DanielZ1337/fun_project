@@ -1,14 +1,14 @@
 'use client'
 
-import Input from '@/components/input'
-import Button from '@/components/button'
+import Input from '@/components/ui/input'
+import Button from '@/components/ui/button'
 import {useState} from 'react'
 import OgImagePreview from '@/components/og-image-preview'
 import * as Toggle from '@radix-ui/react-toggle'
 import {LockClosedIcon, LockOpenIcon} from '@/components/icons'
 import {useRouter} from 'next/navigation'
 
-export default function RepositoryForm() {
+export default function RepositoryOgPreviewForm() {
     const [url, setUrl] = useState('')
     const [submitted, setSubmitted] = useState(false)
     const [privateRepo, setPrivateRepo] = useState(false)
@@ -23,7 +23,7 @@ export default function RepositoryForm() {
     }
 
     return (
-        <>
+        <div className={"w-full flex flex-col gap-6 items-center justify-center"}>
             <form
                 onSubmit={handleSubmit}
                 className={'w-full flex flex-col sm:flex-row gap-6 items-center justify-center'}
@@ -82,7 +82,8 @@ export default function RepositoryForm() {
                             if (!formUrl.startsWith('https') && !formUrl.startsWith('http')) {
                                 formUrl = `http://${formUrl}`
                             }
-                            if (formUrl.startsWith('https://github.com')) {
+                            console.log(formUrl)
+                            if (formUrl.startsWith('https://github.com') || formUrl.startsWith('http://github.com')) {
                                 const url = new URL(formUrl)
                                 router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}`)
                             }
@@ -95,6 +96,6 @@ export default function RepositoryForm() {
             </form>
 
             {submitted && <OgImagePreview url={url}/>}
-        </>
+        </div>
     )
 }

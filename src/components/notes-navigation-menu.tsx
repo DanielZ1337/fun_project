@@ -1,4 +1,4 @@
-import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/accordian";
+import {Accordion, AccordionContent, AccordionItem, AccordionTrigger} from "@/components/ui/accordian";
 import BacklinkNavigationMenuPreview from "@/components/backlink-navigation-menu-preview";
 import {RecursiveComponent} from "@/components/file-explorer";
 import {useEffect, useState} from "react";

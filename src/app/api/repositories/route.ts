@@ -2,28 +2,27 @@ import {authOptions} from "@/lib/auth";
 import {getServerSession} from "next-auth";
 import axios from "axios";
 import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
-const CACHE_EXPIRATION_TIME = 60*60; // Cache expiration time in seconds (1 hour)
+const CACHE_EXPIRATION_TIME = 60 * 60; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {
-       /* const rateLimit = createRateLimiter(redisClient, 20, '60 s');
-        const result = await rateLimit.limit('api/repositories');
+        /* const rateLimit = createRateLimiter(redisClient, 20, '60 s');
+         const result = await rateLimit.limit('api/repositories');
 
-        if (!result.success) {
-            return new Response(JSON.stringify({
-                error: "Too many requests",
-                rateLimitState: result
-            }), {
-                headers: {
-                    'X-RateLimit-Limit': result.limit.toString(),
-                    'X-RateLimit-Remaining': result.remaining.toString(),
-                    'X-RateLimit-Reset': result.reset.toString(),
-                }, status: 429
-            });
-        }
-*/
+         if (!result.success) {
+             return new Response(JSON.stringify({
+                 error: "Too many requests",
+                 rateLimitState: result
+             }), {
+                 headers: {
+                     'X-RateLimit-Limit': result.limit.toString(),
+                     'X-RateLimit-Remaining': result.remaining.toString(),
+                     'X-RateLimit-Reset': result.reset.toString(),
+                 }, status: 429
+             });
+         }
+ */
         const {searchParams} = new URL(req.url);
         const owner = searchParams.get("username");
         const session = await getServerSession(authOptions);
@@ -59,6 +58,7 @@ export async function GET(req: Request) {
         if (error instanceof Error) {
             return new Response(error.message, {status: 500})
         }
+        return new Response("An unknown error occurred", {status: 500});
     }
 }
 

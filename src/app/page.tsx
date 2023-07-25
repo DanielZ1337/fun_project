@@ -1,5 +1,5 @@
 import {GitHubIcon, ObsidianIcon} from '@/components/icons'
-import RepositoryForm from '@/components/repository-form'
+import RepositoryForm from "@/components/ui/repository-form";
 
 export default async function Home() {
     return (

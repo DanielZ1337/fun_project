@@ -10,7 +10,7 @@ import NavbarSessionIndicator from "@/components/navbar-session-indicator";
 export default function Navbar() {
 
     return (
-        <div className={"mb-8"}>
+        <div className={"mb-16"}>
             <div
                 className={
                     "h-full p-4 -mt-4 mx-2 top-0 right-0 flex items-center inset-x-0 justify-between border-b border-neutral-950/50 dark:border-neutral-50/50"

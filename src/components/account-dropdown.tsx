@@ -7,8 +7,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuShortcut,
     DropdownMenuTrigger
-} from "@/components/dropdown-menu";
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/avatar";
+} from "@/components/ui/dropdown-menu";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {signOut} from "next-auth/react";
 import {Session} from "next-auth";
 import Link from "next/link";

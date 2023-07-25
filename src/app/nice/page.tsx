@@ -2,7 +2,7 @@
 
 import {useNotesData} from "@/hooks/useNotesData";
 import {useEffect, useState} from "react";
-import Input from "@/components/input";
+import Input from "@/components/ui/input";
 import ParseMarkdown from "@/components/parse-markdown";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
 import {useSearchParams} from "next/navigation";

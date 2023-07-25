@@ -202,7 +202,7 @@ function ParseMarkdown({
     return (
         <ReactMarkdown
             remarkPlugins={[remarkGfm, remarkEmoji, remarkToc, remarkMath]}
-            rehypePlugins={[rehypeRaw, rehypeSlug, rehypeAutolinkHeadings, /*rehypeHighlight*/]}
+            rehypePlugins={[rehypeSlug, rehypeAutolinkHeadings, rehypeHighlight]}
             components={components}
         >
             {code}
