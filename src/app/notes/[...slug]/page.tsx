@@ -6,6 +6,7 @@ import React, {useEffect} from "react";
 import ParseMarkdown from "@/components/parse-markdown";
 import Link from "next/link";
 import {Spinner} from "@/components/icons";
+import NotesNavigationMenu from "@/components/notes-navigation-menu";
 
 export default function Page({params}: { params: { slug: string[] } }) {
     const {slug} = params
@@ -63,18 +64,7 @@ export default function Page({params}: { params: { slug: string[] } }) {
 
     return (
         <>
-            {currentBacklinks && currentBacklinks.length > 0 &&
-                <div className={"flex flex-col gap-2"}>
-                    {currentBacklinks.map((backlink) => {
-                        return (
-                            <Link href={`/notes/${owner}/${repo}/${backlink.slug}`} key={backlink.slug}
-                                  className={"w-full"}>
-                                {backlink.slug}
-                            </Link>
-                        )
-                    })}
-                </div>
-            }
+            <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo} owner={owner}/>
             {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
                 <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>
             }

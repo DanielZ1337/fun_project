@@ -3,6 +3,7 @@
 import {useEffect, useState} from "react";
 import useTree from "@/hooks/useTree";
 import {DocumentIcon, FolderClosedIcon, FolderOpenIcon} from "@/components/icons";
+import Link from "next/link";
 
 type GitHubTreeItem = {
     name: string
@@ -65,6 +66,12 @@ function RecursiveComponent({data}: any) {
         setShowNested({...showNested, [name]: !showNested[name]})
     }
 
+    //get owner and repo name
+    const url = data.url.split('/')
+    const owner = url[4]
+    const repo = url[5]
+
+
     return (
         <div style={{paddingLeft: '20px'}}>
             {data.children?.map((parent: GitHubTreeItem) => {
@@ -77,7 +84,12 @@ function RecursiveComponent({data}: any) {
                                 {parent.name}
                             </button>}
                         {/* rendering files */}
-                        {parent.type === 'blob' && <span className={"flex gap-2"}><DocumentIcon/>{parent.name}</span>}
+                        {parent.type === 'blob' && parent.name.endsWith('.md') && (
+                            <Link href={`/notes/${owner}/${repo}/${parent.path}`} className={"flex gap-2"}>
+                                <DocumentIcon/>
+                                {parent.name}
+                            </Link>
+                        )}
                         {/* @ts-ignore */}
                         <div style={{display: !showNested[parent.path] && 'none'}}>
                             {parent.children && <RecursiveComponent data={parent}/>}

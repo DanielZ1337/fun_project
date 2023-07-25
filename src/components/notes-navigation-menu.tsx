@@ -11,7 +11,7 @@ interface Backlink {
     slug: string
 }
 
-export default function NotesNavigationMenu({backlinks, token}: { backlinks: Backlink[] | undefined, token?: string}) {
+export default function NotesNavigationMenu({backlinks, owner, repo, token}: { backlinks: Backlink[] | undefined, owner:string, repo:string,token?: string}) {
 
     const [tree, setTree] = useState<any>()
     const [currentFolder, setCurrentFolder] = useState<any>()
