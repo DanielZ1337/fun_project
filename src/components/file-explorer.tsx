@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import useTree from "@/hooks/useTree";
 import {DocumentIcon, FolderClosedIcon, FolderOpenIcon} from "@/components/icons";
 import Link from "next/link";
+import {useSearchParams} from "next/navigation";
 
 type GitHubTreeItem = {
     name: string
@@ -70,7 +71,8 @@ function RecursiveComponent({data}: any) {
     const url = data.url.split('/')
     const owner = url[4]
     const repo = url[5]
-
+    const searchParams = useSearchParams()
+    const token = searchParams.get('token')
 
     return (
         <div style={{paddingLeft: '20px'}}>
@@ -85,7 +87,7 @@ function RecursiveComponent({data}: any) {
                             </button>}
                         {/* rendering files */}
                         {parent.type === 'blob' && parent.name.endsWith('.md') && (
-                            <Link href={`/notes/${owner}/${repo}/${parent.path}`.replace('.md', '')}
+                            <Link href={`/notes/${owner}/${repo}/${parent.path}${token ? `?token=${token}` : ""}`.replace('.md', '')}
                                   className={"flex gap-2"}>
                                 <DocumentIcon/>
                                 {parent.name}

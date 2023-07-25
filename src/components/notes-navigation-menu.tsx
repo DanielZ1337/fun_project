@@ -41,7 +41,8 @@ export default function NotesNavigationMenu({backlinks, owner, repo, token}: {
                     {backlinks && (
                         <div className='grid gap-4'>
                             {backlinks.map(({title, excerpt, slug}) => (
-                                <BacklinkNavigationMenuPreview owner={owner} repo={repo} title={title} excerpt={excerpt} slug={slug} key={slug}/>
+                                <BacklinkNavigationMenuPreview owner={owner} repo={repo} title={title} excerpt={excerpt}
+                                                               slug={slug} key={slug}/>
                             ))}
                         </div>
                     )}

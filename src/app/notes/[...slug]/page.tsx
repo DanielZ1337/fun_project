@@ -1,7 +1,7 @@
 import NotesComponent from "@/app/notes/[...slug]/notes-component";
 import {Metadata} from "next";
 
-export async function generateMetadata({params, searchParams}:{
+export async function generateMetadata({params, searchParams}: {
     params: { slug: string[] },
     searchParams: URLSearchParams
 }): Promise<Metadata> {

@@ -1,9 +1,9 @@
 'use client'
 
-import React, { FC, useEffect, useState } from "react";
+import React, {FC, useEffect, useState} from "react";
 
 import "@react-sigma/core/lib/react-sigma.min.css";
-import { SigmaContainer, useRegisterEvents, useSigma } from "@react-sigma/core";
+import {SigmaContainer, useRegisterEvents, useSigma} from "@react-sigma/core";
 import {SampleGraph} from "@/components/sample";
 import {MouseCoords} from "sigma/types";
 
@@ -77,9 +77,9 @@ const DragNdrop: FC = () => {
     };
 
     return (
-        <SigmaContainer style={{ height: "500px" }}>
-            <SampleGraph />
-            <GraphEvents />
+        <SigmaContainer style={{height: "500px"}}>
+            <SampleGraph/>
+            <GraphEvents/>
         </SigmaContainer>
     );
 };

@@ -1,6 +1,6 @@
 'use client'
 
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {useNotesData} from "@/hooks/useNotesData";
 import React, {useEffect} from "react";
 import ParseMarkdown from "@/components/parse-markdown";
@@ -15,7 +15,6 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const {data, isLoading} = useNotesData(owner, repo, token ? token : undefined)
-    const pathname = usePathname()
     const router = useRouter()
     const [currentSlug, setCurrentSlug] = React.useState<string | undefined>(undefined)
     const [currentBacklinks, setCurrentBacklinks] = React.useState<{
@@ -30,13 +29,12 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
     useEffect(() => {
         if (slugs.length === 0) {
-            router.push(`/notes/${owner}/${repo}/readme`)
+            router.push(`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/readme${token ? `?token=${token}` : ""}`)
         }
         if (!data) return
 
         if (data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/")).length > 0) {
             const currentPost = data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/"))[0]
-            console.log(currentPost.slug, currentSlug)
             if (currentPost.slug !== currentSlug) {
                 setCurrentSlug(currentPost.slug)
                 const backlinks = data.filter((note) => note.slug !== currentPost.slug && note.markdown.includes(currentPost.slug)).map((note) => {
@@ -51,7 +49,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
             }
         }
 
-    }, [currentSlug, data, owner, repo, router, slugs])
+    }, [currentSlug, data, owner, repo, router, slugs, token])
 
     if (isLoading) {
         return (

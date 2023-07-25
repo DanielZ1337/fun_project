@@ -116,7 +116,7 @@ function ParseMarkdown({
         blockquote: ({className, ...props}: ComponentTypes) => (
             <blockquote
                 className={cn(
-                    "mt-6 border-l-2 pl-6 italic [&>*]:text-muted-foreground",
+                    "mt-6 border-l-2 pl-6 italic [&>*]:text-gray-500",
                     className
                 )}
                 {...props}
@@ -190,7 +190,7 @@ function ParseMarkdown({
             ) : (
                 <code
                     {...props}
-                    className={cn("rounded-sm border px-1 py-0.5", className)}
+                    className={cn("rounded-sm border px-1 py-0.5 w-fit overflow-x-auto", className)}
                 >
                     {children}
                 </code>

@@ -204,7 +204,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             for (const m of matches) {
                 // if the link matches a media file (image, video) in the github repository
                 if (m[2].toLowerCase().match(/.*\.(png|jpg|jpeg|gif|mp4|webm|ogg|mp3|wav)$/g)) {
-                    console.log(m[2])
+                    // console.log(m[2])
                     // take path into consideration (e.g. /posts/2021-01-01-post-name)
 
                     /*if (m[2].startsWith('/')) {
@@ -237,7 +237,8 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
                 }
 
                 if (m[2].toLowerCase().endsWith('.md')) {
-                    content = content.replace(m[2], m[2].replace(/\.md$/, ''))
+                    const linkWithoutMD = m[2].replace(/\.md$/, '')
+                    content = content.replace(m[2], `${linkWithoutMD}${token ? `?token=${token}` : ''}`)
                 }
             }
 
