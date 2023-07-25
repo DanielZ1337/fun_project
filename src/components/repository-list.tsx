@@ -50,7 +50,10 @@ export default function RepositoryList({username}: RepositoryListProps) {
                 } = item;
                 return (
                     <li key={id}>
-                        <div
+                        <Link
+                            href={{
+                                pathname: `/notes/${full_name}`,
+                            }}
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
@@ -237,7 +240,7 @@ export default function RepositoryList({username}: RepositoryListProps) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     </li>
                 );
             })}
