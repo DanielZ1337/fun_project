@@ -2,13 +2,45 @@ import {signIn, useSession} from "next-auth/react";
 import {Spinner} from "@/components/icons";
 import {AccountDropdown} from "@/components/account-dropdown";
 import Button from "@/components/ui/button";
-import React from "react";
+import React, {useEffect} from "react";
 import {useToast} from "@/hooks/useToast";
+import {useRouter, useSearchParams} from "next/navigation";
 
 export default function NavbarSessionIndicator() {
     const {data: session, status} = useSession();
     const [isLoggingIn, setIsLoggingIn] = React.useState(false)
     const useToaster = useToast()
+    const searchParams = useSearchParams()
+    const router = useRouter()
+
+
+useEffect(() => {
+    if (searchParams.get('error') === "OAuthAccountNotLinked") {
+        useToaster.toast({
+            title: "Error",
+            description: "This account is not linked to any GitHub account.",
+        })
+        try {
+            signIn('github').then(() => {
+                useToaster.toast({
+                    title: "Logged in",
+                    description: "You have successfully logged in.",
+                })
+            })
+        } catch (e) {
+            useToaster.toast({
+                title: "Error",
+                description: "An error occurred while logging in.",
+            })
+        }
+    }
+    if (status === "authenticated") {
+        useToaster.toast({
+            title: "Logged in",
+            description: "You have successfully logged in.",
+        })
+    }
+}, [searchParams, status, useToaster])
 
     async function handleLogin() {
         try {
