@@ -14,6 +14,7 @@ import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
 import moment from "moment";
 import Post from "@/types/post";
+import rehypeHighlight from "rehype-highlight";
 
 async function getImageFromGitHub(owner: string, repo: string, path: string, token?: string): Promise<string | undefined> {
     try {
@@ -243,7 +244,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             }
 
 
-            const processedContent = await unified()
+            /*const processedContent = await unified()
                 .use(remarkParse)
                 .use(remarkGfm)
                 .use(remarkToc)
@@ -255,7 +256,8 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
                 .use(rehypeStringify)
                 .process(content)
 
-            data.content = processedContent.toString()
+
+            data.content = processedContent.toString()*/
         }
 
         return {

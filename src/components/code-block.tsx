@@ -1,9 +1,10 @@
-import {useState} from "react"
-import hljs from "highlight.js"
-
+import {CSSProperties, useState} from "react"
+import {Prism as SyntaxHighlighter} from "react-syntax-highlighter"
 import {cn} from "@/lib/utils"
-
 import CopyButton from "@/components/copy-button"
+import {customCodeTheme} from "@/styles/custom-code-theme";
+import {useTheme} from "next-themes";
+
 
 function CodeBlock({
                        language,
@@ -22,9 +23,8 @@ function CodeBlock({
     codeWrap?: boolean
     copyOnHover?: boolean
 }) {
+    const theme = useTheme()
     value = value || ""
-    !hljs.getLanguage(language) && (language = "plaintext")
-    const highlightedCode = hljs.highlight(value, {language}).value
     const [isBlockHovered, setIsBlockHovered] = useState(false)
 
     return (
@@ -49,13 +49,16 @@ function CodeBlock({
       />
 
       <div className="absolute -right-4 top-0 h-full w-12 bg-background blur"></div>
-      <code
-          dangerouslySetInnerHTML={{__html: highlightedCode}}
+      <SyntaxHighlighter
+          language={language}
           className={cn(
-              `hljs language-${language} no-scrollbar min-w-full overflow-x-scroll px-4 py-3 text-sm`,
+              `min-w-full overflow-x-scroll px-4 py-3 text-sm`,
               codeClass
           )}
-      ></code>
+            style={theme.theme === "dark" ? customCodeTheme.dark : customCodeTheme.light}
+      >
+        {value}
+      </SyntaxHighlighter>
     </pre>
     )
 }

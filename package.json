@@ -43,6 +43,7 @@
     "react": "^0.0.0-experimental-53ac21937-20230703",
     "react-dom": "^0.0.0-experimental-53ac21937-20230703",
     "react-markdown": "^8.0.7",
+    "react-syntax-highlighter": "^15.5.0",
     "rehype-autolink-headings": "^6.1.1",
     "rehype-highlight": "^6.0.0",
     "rehype-mathjax": "^4.0.2",
@@ -68,6 +69,7 @@
     "@types/nprogress": "^0.2.0",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
+    "@types/react-syntax-highlighter": "^15.5.7",
     "@types/remove-markdown": "^0.3.1",
     "graphology-types": "^0.24.7",
     "tailwindcss-animate": "^1.0.6"
