@@ -11,7 +11,7 @@ export async function GET(req: Request) {
         (
             // Modified based on https://tailwindui.com/components/marketing/sections/cta-sections
 
-            <div tw='flex h-full w-full items-center justify-center tracking-tight font-base font-bold'>
+            <div tw='flex h-full w-full items-center justify-center tracking-tight font-base font-bold bg-white'>
                 <div tw='absolute flex items-center left-0 -top-1'>
                     <span tw='bg-black w-10 h-10'/>
                     <span tw='ml-2 text-2xl'>
