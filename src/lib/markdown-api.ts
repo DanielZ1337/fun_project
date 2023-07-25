@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios'
+import axios from 'axios'
 // import remarkFrontmatter from 'remark-frontmatter'
 // import rehypeKatex from 'rehype-katex'
 import {GitHubTreeItemResponse, GitHubTreeResponse} from "@/types/github-reponses";
@@ -18,7 +18,7 @@ import rehypeHighlight from "rehype-highlight";
 
 async function getImageFromGitHub(owner: string, repo: string, path: string, token?: string): Promise<string | undefined> {
     try {
-        const {data} = await axios.get('${process.env.NODE_ENV !== \'development\' && process.env.VERCEL_URL}/api/github', {
+        const {data} = await axios.get('/api/github', {
             params: {
                 owner,
                 repo,
@@ -35,7 +35,7 @@ async function getImageFromGitHub(owner: string, repo: string, path: string, tok
 
 export async function getRawFile(owner: string, repo: string, path: string, token?: string): Promise<string | undefined> {
     try {
-        const {data} = await axios.get(`${process.env.NODE_ENV !== 'development' && process.env.VERCEL_URL}/api/raw`, {
+        const {data} = await axios.get(`/api/raw`, {
             params: {
                 owner,
                 repo,
@@ -52,7 +52,7 @@ export async function getRawFile(owner: string, repo: string, path: string, toke
 
 export async function getAllMarkdownFiles(owner: string, repo: string, token?: string): Promise<GitHubTreeItemResponse[] | undefined> {
     try {
-        const {data} = await axios.get(`${process.env.NODE_ENV !== 'development' && process.env.VERCEL_URL}/api/tree`, {
+        const {data} = await axios.get(`http://localhost:3000/api/tree`, {
             params: {
                 owner,
                 repo,
@@ -63,9 +63,6 @@ export async function getAllMarkdownFiles(owner: string, repo: string, token?: s
 
         return data.tree.filter((file) => file.path.includes('.md'))
     } catch (e) {
-        if (e instanceof AxiosError) {
-            console.log(e.message)
-        }
         return undefined
     }
 }
@@ -163,7 +160,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
         }
 
         if (!data.date) {
-            const {data: commit} = await axios.get(`${process.env.NODE_ENV !== 'development' && process.env.VERCEL_URL}/api/commits`, {
+            const {data: commit} = await axios.get(`/api/commits`, {
                 params: {
                     owner,
                     repo,
@@ -175,7 +172,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
         }
 
         if (!data.updatedAt) {
-            const {data: commit} = await axios.get(`${process.env.NODE_ENV !== 'development' && process.env.VERCEL_URL}/api/commits`, {
+            const {data: commit} = await axios.get(`/api/commits`, {
                 params: {
                     owner,
                     repo,
@@ -187,7 +184,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
         }
 
         if (!data.author) {
-            const {data: commit} = await axios.get(`${process.env.NODE_ENV !== 'development' && process.env.VERCEL_URL}/api/commits`, {
+            const {data: commit} = await axios.get(`/api/commits`, {
                 params: {
                     owner,
                     repo,

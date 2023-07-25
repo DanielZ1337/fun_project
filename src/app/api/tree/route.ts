@@ -47,7 +47,9 @@ export async function GET(req: Request) {
                 Accept: "application/vnd.github.v3+json",
                 Authorization: token ? `Bearer ${token}` : session?.user.accessToken && `Bearer ${session.user.accessToken}`,
             },
-        });
+        }).then(res => res.data).catch((error: AxiosError) => {
+            console.log(error.response?.data);
+        })
 
         // Cache the response in Redis using the SETEX command
         // await redisClient.setex(cacheKey, CACHE_EXPIRATION_TIME, JSON.stringify(data));
