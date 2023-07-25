@@ -2,37 +2,36 @@ import {authOptions} from "@/lib/auth";
 import {getServerSession} from "next-auth";
 import axios from "axios";
 import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 60 * 60; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {
-        const rateLimit = createRateLimiter(redisClient, 20, '60 s');
-        const result = await rateLimit.limit('api/repositories');
+        /* const rateLimit = createRateLimiter(redisClient, 20, '60 s');
+         const result = await rateLimit.limit('api/repositories');
 
-        if (!result.success) {
-            return new Response(JSON.stringify({
-                error: "Too many requests",
-                rateLimitState: result
-            }), {
-                headers: {
-                    'X-RateLimit-Limit': result.limit.toString(),
-                    'X-RateLimit-Remaining': result.remaining.toString(),
-                    'X-RateLimit-Reset': result.reset.toString(),
-                }, status: 429
-            });
-        }
-
+         if (!result.success) {
+             return new Response(JSON.stringify({
+                 error: "Too many requests",
+                 rateLimitState: result
+             }), {
+                 headers: {
+                     'X-RateLimit-Limit': result.limit.toString(),
+                     'X-RateLimit-Remaining': result.remaining.toString(),
+                     'X-RateLimit-Reset': result.reset.toString(),
+                 }, status: 429
+             });
+         }
+ */
         const {searchParams} = new URL(req.url);
         const owner = searchParams.get("username");
         const session = await getServerSession(authOptions);
 
         if (session && !owner) {
-            const cachedRepos = await getCachedRepos(session.user.accessToken);
+            /*const cachedRepos = await getCachedRepos(session.user.accessToken);
             if (cachedRepos) {
                 return new Response(JSON.stringify(cachedRepos), {status: 200});
-            }
+            }*/
 
             const repos = await getReposByToken(session.user.accessToken);
             if (repos.status === 401) {
@@ -44,7 +43,7 @@ export async function GET(req: Request) {
             }
 
             // Cache the response in Redis using the SETEX command
-            await cacheRepos(session.user.accessToken, repos.data);
+            // await cacheRepos(session.user.accessToken, repos.data);
 
             return new Response(JSON.stringify(repos.data), {status: 200});
         }

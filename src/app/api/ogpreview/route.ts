@@ -1,14 +1,12 @@
 import he from "he";
 import {OgPreview} from "@/types/og-preview";
 import axios from "axios";
-import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 60 * 60 // 1 hour
 
 export async function GET(req: Request) {
     try {
-        const rateLimit = createRateLimiter(redisClient, 5, '10 s');
+        /*const rateLimit = createRateLimiter(redisClient, 5, '10 s');
         const result = await rateLimit.limit('api/ogpreview');
 
         if (!result.success) {
@@ -16,7 +14,7 @@ export async function GET(req: Request) {
                 error: "Too many requests",
                 resultState: result
             }), {status: 429});
-        }
+        }*/
 
         const {searchParams} = new URL(req.url);
         let href = searchParams.get("url");
@@ -29,12 +27,12 @@ export async function GET(req: Request) {
             href = `http://${href}`;
         }
 
-        // Check if the response is cached in Redis
+        /*// Check if the response is cached in Redis
         const cachedResponse = await redisClient.get(href);
 
         if (cachedResponse) {
             return new Response(JSON.stringify(cachedResponse), {status: 200});
-        }
+        }*/
 
         const res = await axios
             .get(href, {
@@ -81,7 +79,7 @@ export async function GET(req: Request) {
         } as OgPreview;
 
         // Cache the response in Redis
-        await redisClient.setex(href, CACHE_EXPIRATION_TIME, JSON.stringify(ogPreviewData));
+        // await redisClient.setex(href, CACHE_EXPIRATION_TIME, JSON.stringify(ogPreviewData));
 
         return new Response(JSON.stringify(ogPreviewData), {status: 200});
     } catch (error) {

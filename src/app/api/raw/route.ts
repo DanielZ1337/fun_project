@@ -1,14 +1,12 @@
 import axios, {AxiosError} from "axios";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/lib/auth";
-import {redisClient} from "@/lib/redis";
-import {createRateLimiter} from "@/lib/ratelimiter";
 
 const CACHE_EXPIRATION_TIME = 60 * 60; // Cache expiration time in seconds (1 hour)
 
 export async function GET(req: Request) {
     try {
-        const rateLimit = createRateLimiter(redisClient, 120, '30 s');
+        /*const rateLimit = createRateLimiter(redisClient, 120, '30 s');
         const result = await rateLimit.limit('api/raw');
 
         if (!result.success) {
@@ -22,7 +20,7 @@ export async function GET(req: Request) {
                     'X-RateLimit-Reset': result.reset.toString(),
                 }, status: 429
             });
-        }
+        }*/
 
         const {searchParams} = new URL(req.url);
         const owner = searchParams.get("owner");
@@ -33,7 +31,7 @@ export async function GET(req: Request) {
 
         if (!owner || !repo || !path) return new Response("Missing parameters", {status: 400});
 
-        // Generate a unique cache key based on the request parameters
+        /*// Generate a unique cache key based on the request parameters
         const cacheKey = `${owner}-${repo}-${path}`;
 
         // Check if the response is cached in Redis
@@ -41,7 +39,7 @@ export async function GET(req: Request) {
 
         if (cachedResponse) {
             return new Response(JSON.stringify(cachedResponse), {status: 200});
-        }
+        }*/
 
         const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
             headers: {
@@ -51,7 +49,7 @@ export async function GET(req: Request) {
         });
 
         // Cache the response in Redis using the SETEX command
-        await redisClient.setex(cacheKey, CACHE_EXPIRATION_TIME, data);
+        // await redisClient.setex(cacheKey, CACHE_EXPIRATION_TIME, data);
 
         return new Response(data, {status: 200});
     } catch (error) {

@@ -6,7 +6,6 @@ import React, {useEffect} from "react";
 import ParseMarkdown from "@/components/parse-markdown";
 import {Spinner} from "@/components/icons";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
-import NotesGraph from "@/components/notes-graph";
 
 export default function NotesComponent({params}: { params: { slug: string[] } }) {
     const {slug} = params
@@ -37,6 +36,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
         if (data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/")).length > 0) {
             const currentPost = data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/"))[0]
+            console.log(currentPost.slug, currentSlug)
             if (currentPost.slug !== currentSlug) {
                 setCurrentSlug(currentPost.slug)
                 const backlinks = data.filter((note) => note.slug !== currentPost.slug && note.markdown.includes(currentPost.slug)).map((note) => {
@@ -68,6 +68,11 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
                                  owner={owner}/>
             {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
                 <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>
+            }
+            {data && data.filter((note) => note.slug === currentSlug).length === 0 &&
+                <div className={"flex gap-2 flex-col items-center justify-center w-full h-full mt-8"}>
+                    <p className={"text-sm font-medium text-gray-500"}>Note not found</p>
+                </div>
             }
             {/*<NotesGraph posts={data} owner={owner} repo={repo} token={token ? token : undefined}/>*/}
         </>
