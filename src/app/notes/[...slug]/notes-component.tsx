@@ -35,8 +35,8 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         }
         if (!data) return
 
-        if (data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(slug.toLowerCase())).join("/")).length > 0) {
-            const currentPost = data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(slug.toLowerCase())).join("/"))[0]
+        if (data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/")).length > 0) {
+            const currentPost = data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/"))[0]
             if (currentPost.slug !== currentSlug) {
                 setCurrentSlug(currentPost.slug)
                 const backlinks = data.filter((note) => note.slug !== currentPost.slug && note.markdown.includes(currentPost.slug)).map((note) => {
