@@ -62,7 +62,7 @@ export async function getAllData(owner: string, repo: string, token?: string): P
     const postsWithBackLinks = (await posts).map((post) => {
         return {
             ...post,
-            backLinks: {
+            backlinks: {
                 to: backLinks.get(post.slug),
                 from: Array.from(backLinks.entries()).filter(([, links]) => links.includes(post.slug)).map(([slug]) => slug)
             }
@@ -221,7 +221,13 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
                     content = content.replace(m[2], link)
                 }
             }
+
+            if (m[2].toLowerCase().endsWith('.md')) {
+                content = content.replace(m[2], m[2].replace(/\.md$/, ''))
+            }
         }
+
+
 
 
         const processedContent = await unified()

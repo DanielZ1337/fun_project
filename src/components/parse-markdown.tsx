@@ -1,7 +1,6 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkEmoji from "remark-emoji";
 import remarkGfm from "remark-gfm";
@@ -9,15 +8,15 @@ import {cn} from "@/lib/utils";
 import Link from "next/link";
 import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
-import axios from "axios";
 import rehypeHighlight from "rehype-highlight";
 
 
-// import CodeBlock from "../code-block"
+import CodeBlock from "@/components/code-block";
 
 interface ComponentTypes {
     className?: string;
     href?: string;
+
     [key: string]: any;
 }
 
@@ -85,6 +84,7 @@ function ParseMarkdown({
         ),
         a: ({className, href, ...props}: ComponentTypes) => {
             const isHashURL = href?.includes("#"); // Ex. https://example.com#section
+            const isExternalURL = href?.includes("://"); // Ex. https://example.com
 
             return (
                 <Link
@@ -94,7 +94,7 @@ function ParseMarkdown({
                     )}
                     {...props}
                     href={href!}
-                    target={isHashURL ? "_self" : "_blank"}
+                    target={isHashURL || !isExternalURL ? "_self" : "_blank"}
                 />
             );
         },
@@ -181,13 +181,12 @@ function ParseMarkdown({
         code({inline, className, children, ...props}: ComponentTypes) {
             const match = /language-(\w+)/.exec(className || "");
             return !inline && match ? (
-                /*<CodeBlock
-                                    value={String(children).replace(/\n$/, "")}
-                                    language={match[1]}
-                                    {...props}
-                                    copyable={codeCopyable}
-                                />*/
-                <></>
+                <CodeBlock
+                    value={String(children).replace(/\n$/, "")}
+                    language={match[1]}
+                    {...props}
+                    copyable={codeCopyable}
+                />
             ) : (
                 <code
                     {...props}
