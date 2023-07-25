@@ -85,7 +85,7 @@ function RecursiveComponent({data}: any) {
                             </button>}
                         {/* rendering files */}
                         {parent.type === 'blob' && parent.name.endsWith('.md') && (
-                            <Link href={`/notes/${owner}/${repo}/${parent.path}`} className={"flex gap-2"}>
+                            <Link href={`/notes/${owner}/${repo}/${parent.path}`.replace('.md', '')} className={"flex gap-2"}>
                                 <DocumentIcon/>
                                 {parent.name}
                             </Link>

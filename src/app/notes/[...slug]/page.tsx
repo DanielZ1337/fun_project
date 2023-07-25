@@ -4,7 +4,6 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useNotesData} from "@/hooks/useNotesData";
 import React, {useEffect} from "react";
 import ParseMarkdown from "@/components/parse-markdown";
-import Link from "next/link";
 import {Spinner} from "@/components/icons";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
 
@@ -64,20 +63,11 @@ export default function Page({params}: { params: { slug: string[] } }) {
 
     return (
         <>
-            <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo} owner={owner}/>
+            <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo}
+                                 owner={owner}/>
             {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
                 <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>
             }
-            <div className={"flex flex-col gap-2"}>
-                {data &&
-                    data.map((note) => {
-                        return (
-                            <Link href={`/notes/${owner}/${repo}/${note.slug}`} key={note.slug} className={"w-full"}>
-                                {note.slug}
-                            </Link>
-                        )
-                    })}
-            </div>
         </>
     )
 }
