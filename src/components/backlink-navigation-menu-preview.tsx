@@ -15,7 +15,7 @@ export default function BacklinkNavigationMenuPreview({owner, repo, title, excer
 
     return (
         <Link href={`/notes/${owner}/${repo}/${slug}${token ? `?token=${token}` : ""}`}
-              className='block p-4 border border-gray-200 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900'>
+              className='block p-4 border border-gray-200 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-900 break-all'>
             <h3 className='text-lg font-semibold'>{title}</h3>
             <p className='mt-1 text-sm text-gray-500'>{excerpt}</p>
         </Link>
