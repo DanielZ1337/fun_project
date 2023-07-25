@@ -10,37 +10,6 @@ export default function NavbarSessionIndicator() {
     const {data: session, status} = useSession();
     const [isLoggingIn, setIsLoggingIn] = React.useState(false)
     const useToaster = useToast()
-    const searchParams = useSearchParams()
-    const router = useRouter()
-
-
-useEffect(() => {
-    if (searchParams.get('error') === "OAuthAccountNotLinked") {
-        useToaster.toast({
-            title: "Error",
-            description: "This account is not linked to any GitHub account.",
-        })
-        try {
-            signIn('github').then(() => {
-                useToaster.toast({
-                    title: "Logged in",
-                    description: "You have successfully logged in.",
-                })
-            })
-        } catch (e) {
-            useToaster.toast({
-                title: "Error",
-                description: "An error occurred while logging in.",
-            })
-        }
-    }
-    if (status === "authenticated") {
-        useToaster.toast({
-            title: "Logged in",
-            description: "You have successfully logged in.",
-        })
-    }
-}, [searchParams, status, useToaster])
 
     async function handleLogin() {
         try {
