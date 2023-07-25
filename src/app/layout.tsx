@@ -31,7 +31,7 @@ export const metadata = {
         description: 'Browse GitHub repositories with ease',
         images: [
             {
-                url: '/api/og',
+                url: 'GitHub Repository Browser.png',
                 width: 1200,
                 height: 630,
                 alt: 'GitHub Repository Browser',
