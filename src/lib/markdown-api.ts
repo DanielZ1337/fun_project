@@ -67,7 +67,7 @@ export async function getAllMarkdownFiles(owner: string, repo: string, token?: s
     }
 }
 
-export async function getAllData(owner: string, repo: string, token?: string): Promise<Post[]> {
+export async function getAllNotesData(owner: string, repo: string, token?: string): Promise<Post[]> {
     const files = await getAllMarkdownFiles(owner, repo, token)
     if (!files) return Promise.resolve([])
     const rawFiles = await Promise.all(files.map((file) => getRawFile(owner, repo, file.path, token)))
