@@ -30,11 +30,12 @@ function CodeBlock({
     return (
         <pre
             className={cn(
-                `relative flex w-full h-full overflow-hidden rounded-lg ${
+                `relative flex w-fit h-full overflow-hidden rounded-lg ${
                     value ? "border" : null
                 } ${codeWrap ? "whitespace-pre-wrap" : null} `,
                 preClass
             )}
+
             onMouseEnter={() => {
                 setIsBlockHovered(true)
             }}
@@ -52,7 +53,7 @@ function CodeBlock({
       <SyntaxHighlighter
           language={language}
           className={cn(
-              `min-w-full overflow-x-scroll px-4 py-3 text-sm`,
+              `min-w-full px-4 py-3 text-sm`,
               codeClass
           )}
             style={theme.theme === "dark" ? customCodeTheme.dark : customCodeTheme.light}
