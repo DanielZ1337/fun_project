@@ -7,7 +7,7 @@ import {generateFileExplorer} from '@/components/file-explorer'
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
 import {useLinkMappings} from "@/hooks/useLinkMappings";
 
-export default function Page() {
+export default function NotesComponent() {
 
     const [search, setSearch] = useState<string>()
     const [tree, setTree] = useState<any>()

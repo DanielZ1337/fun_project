@@ -1,5 +1,6 @@
 import {GitHubIcon, ObsidianIcon} from '@/components/icons'
 import RepositoryForm from "@/components/ui/repository-form";
+import Bruh from "@/components/bruh";
 
 export default async function Home() {
     return (
@@ -33,6 +34,7 @@ export default async function Home() {
                 </p>
             </div>
 
+            {/*<Bruh/>*/}
             <RepositoryForm/>
         </div>
     )

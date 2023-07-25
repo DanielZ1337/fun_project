@@ -1,32 +1,36 @@
-import {ImageResponse} from '@vercel/og';
+import {ImageResponse} from "next/server";
 
 export const runtime = 'edge'
 
-export async function GET() {
+export async function GET(req: Request) {
+    const {searchParams} = new URL(req.url)
+    const owner = searchParams.get('owner')
+    const repo = searchParams.get('repo')
+
     return new ImageResponse(
         (
             // Modified based on https://tailwindui.com/components/marketing/sections/cta-sections
 
-            <div tw="flex flex-col w-full h-full items-center justify-center bg-white">
-                <div tw="bg-gray-50 flex w-full">
-                    <div tw="flex flex-col md:flex-row w-full py-12 px-4 md:items-center justify-between p-8">
-                        <h2 tw="flex flex-col text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 text-left">
-                            <span>Ready to dive in?</span>
-                            <span tw="text-indigo-600">Start your free trial today.</span>
-                        </h2>
-                        <div tw="mt-8 flex md:mt-0">
-                            <div tw="flex rounded-md shadow">
-                                <a tw="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-5 py-3 text-base font-medium text-white">Get
-                                    started</a>
-                            </div>
-                            <div tw="ml-3 flex rounded-md shadow">
-                                <a tw="flex items-center justify-center rounded-md border border-transparent bg-white px-5 py-3 text-base font-medium text-indigo-600">Learn
-                                    more</a>
-                            </div>
-                        </div>
-                    </div>
+            <div tw='flex h-full w-full items-center justify-center tracking-tight font-base font-bold'>
+                <div tw='absolute flex items-center left-0 -top-1'>
+                    <span tw='bg-black w-10 h-10'/>
+                    <span tw='ml-2 text-2xl'>
+                        {owner}
+                    </span>
+                </div>
+                <div
+                    tw='flex text-center justify-center w-auto bg-black text-white leading-6 max-w-xl text-5xl flex-wrap py-5 px-12 my-10 mx-auto'>
+                    <span tw='leading-6 text-3xl font-normal bg-clip-text' style={{
+                        /* purple black gradient background */
+                        backgroundImage: 'linear-gradient(90deg, #805ad5 0%, #6b46c1 100%)',
+                        backgroundClip: 'text',
+                        color: 'transparent',
+                    }}>
+                        {repo}
+                    </span>
                 </div>
             </div>
+
         ),
         {
             width: 1200,

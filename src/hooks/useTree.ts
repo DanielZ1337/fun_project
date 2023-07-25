@@ -1,5 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
+import {GitHubTreeResponse} from "@/types/github-reponses";
 
 
 type GitHubTreeItem = {
@@ -35,7 +36,7 @@ export default function useTree(owner: string, repo: string, recursive: boolean 
             })
 
 
-            return data as GitHubRootTree
+            return data as GitHubTreeResponse
         },
         refetchOnWindowFocus: process.env.NODE_ENV !== 'development',
         refetchOnReconnect: process.env.NODE_ENV !== 'development',

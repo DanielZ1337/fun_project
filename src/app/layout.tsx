@@ -12,6 +12,7 @@ import {Suspense} from "react";
 const inter = Inter({subsets: ['latin']})
 
 export const metadata = {
+    metadataBase: new URL('https://fun-project-tau.vercel.app/'),
     title: {
         template: '%s | GitHub Repository Browser',
         default: 'GitHub Repository Browser',
