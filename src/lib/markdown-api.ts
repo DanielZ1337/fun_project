@@ -52,7 +52,7 @@ export async function getRawFile(owner: string, repo: string, path: string, toke
 
 export async function getAllMarkdownFiles(owner: string, repo: string, token?: string): Promise<GitHubTreeItemResponse[] | undefined> {
     try {
-        const {data} = await axios.get(`http://localhost:3000/api/tree`, {
+        const {data} = await axios.get(`/api/tree`, {
             params: {
                 owner,
                 repo,
@@ -244,7 +244,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             }
 
 
-            /*const processedContent = await unified()
+            const processedContent = await unified()
                 .use(remarkParse)
                 .use(remarkGfm)
                 .use(remarkToc)
@@ -257,7 +257,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
                 .process(content)
 
 
-            data.content = processedContent.toString()*/
+            data.content = processedContent.toString()
         }
 
         return {
