@@ -55,6 +55,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
     }, [currentSlug, data, owner, repo, router, slugs])
 
     useEffect(() => {
+        if (slugs.length === 0) return
         if (isError) {
             toast({
                 title: "Error loading notes",
@@ -62,7 +63,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
                 duration: 5000,
             })
         }
-    }, [isError, toast])
+    }, [isError, slugs.length, toast])
 
     if (isLoading) {
         return (

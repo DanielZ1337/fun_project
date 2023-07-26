@@ -44,14 +44,13 @@ export default function RepositoryOgPreviewForm() {
                         placeholder={'Enter a GitHub repository URL...'}
                         type={'text'}
                     />
-                    {privateRepo && (
-                        <Input
-                            tabIndex={2}
-                            name={'token'}
-                            placeholder={'Enter a GitHub token...'}
-                            type={'password'}
-                        />
-                    )}
+                    <Input
+                        tabIndex={2}
+                        name={'token'}
+                        placeholder={'Enter a GitHub token...'}
+                        type={'password'}
+                        className={privateRepo ? 'block' : 'hidden'}
+                    />
                 </div>
 
                 <Toggle.Root
