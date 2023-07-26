@@ -1,4 +1,4 @@
-import {CSSProperties, useState} from "react"
+import {useState} from "react"
 import {Prism as SyntaxHighlighter} from "react-syntax-highlighter"
 import {cn} from "@/lib/utils"
 import CopyButton from "@/components/copy-button"
@@ -56,7 +56,7 @@ function CodeBlock({
               `min-w-full px-4 py-3 text-sm`,
               codeClass
           )}
-            style={theme.theme === "dark" ? customCodeTheme.dark : customCodeTheme.light}
+          style={theme.theme === "dark" ? customCodeTheme.dark : customCodeTheme.light}
       >
         {value}
       </SyntaxHighlighter>

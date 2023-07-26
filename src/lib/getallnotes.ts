@@ -1,8 +1,8 @@
-import axios from 'axios'
-// import remarkFrontmatter from 'remark-frontmatter'
-// import rehypeKatex from 'rehype-katex'
-import {GitHubTreeItemResponse, GitHubTreeResponse} from "@/types/github-reponses";
+import {Session} from "next-auth";
+import axios from "axios";
+import Post from "@/types/post";
 import matter from "gray-matter";
+import moment from "moment/moment";
 import RemoveMarkdown from "remove-markdown";
 import {unified} from "unified";
 import remarkParse from "remark-parse";
@@ -12,65 +12,100 @@ import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
-import moment from "moment";
-import Post from "@/types/post";
+import {GitHubTreeResponse} from "@/types/github-reponses";
 
-async function getImageFromGitHub(owner: string, repo: string, path: string, token?: string): Promise<string | undefined> {
-    try {
-        const {data} = await axios.get('/api/github', {
-            params: {
-                owner,
-                repo,
-                path,
-                token
-            }
-        })
-
-        return data.download_url
-    } catch (e) {
-        return undefined
-    }
+interface getTreeProps {
+    owner: string;
+    repo: string;
+    recursive: boolean;
+    token?: string;
+    session?: Session;
 }
 
-export async function getRawFile(owner: string, repo: string, path: string, token?: string): Promise<string | undefined> {
-    try {
-        const {data} = await axios.get(`/api/raw`, {
-            params: {
-                owner,
-                repo,
-                path,
-                token
-            }
-        })
+async function getTree({owner, repo, recursive, token, session}: getTreeProps) {
+    const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/git/trees/main?${recursive && 'recursive=1'}`, {
+        headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: token ? `Bearer ${token}` : session?.user.accessToken && `Bearer ${session.user.accessToken}`,
+        },
+    }) as { data: GitHubTreeResponse }
 
-        return data
-    } catch (e) {
-        return undefined
-    }
+    return data.tree.filter((file) => file.path.includes('.md'))
 }
 
-export async function getAllMarkdownFiles(owner: string, repo: string, token?: string): Promise<GitHubTreeItemResponse[] | undefined> {
-    try {
-        const {data} = await axios.get(`/api/tree`, {
-            params: {
-                owner,
-                repo,
-                recursive: true,
-                token
-            }
-        }) as { data: GitHubTreeResponse }
-
-        return data.tree.filter((file) => file.path.includes('.md'))
-    } catch (e) {
-        return undefined
-    }
+interface getRawProps {
+    owner: string;
+    repo: string;
+    path: string;
+    token?: string;
+    session?: Session;
 }
 
-export async function getAllNotesData(owner: string, repo: string, token?: string): Promise<Post[]> {
-    const files = await getAllMarkdownFiles(owner, repo, token)
-    if (!files) return Promise.resolve([])
-    const rawFiles = await Promise.all(files.map((file) => getRawFile(owner, repo, file.path, token)))
-    const posts = await Promise.all(rawFiles.map((raw, index) => rawFileToPost(raw!, owner, repo, files[index].path, token)))
+async function getRaw({owner, repo, path, token, session}: getRawProps): Promise<string> {
+    const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        headers: {
+            Accept: "application/vnd.github.raw",
+            Authorization: token ? `Bearer ${token}` : session?.user.accessToken && `Bearer ${session.user.accessToken}`,
+        },
+    });
+
+    return data;
+}
+
+interface getCommitProps {
+    owner: string;
+    repo: string;
+    path: string;
+    token?: string;
+    session?: Session;
+    per_page?: number;
+}
+
+async function getCommit({owner, repo, token, session, path, per_page}: getCommitProps): Promise<any> {
+    const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/commits`, {
+        headers: {
+            Accept: "application/vnd.github.v3+json",
+            Authorization: token ? `Bearer ${token}` : session?.user.accessToken && `Bearer ${session.user.accessToken}`,
+        },
+        params: {
+            path: path,
+            per_page: per_page ? per_page : 1,
+        },
+    });
+
+    return data;
+}
+
+interface getGithubFileProps {
+    owner: string;
+    repo: string;
+    path: string;
+    token?: string;
+    session?: Session;
+}
+
+async function getGithubFile({owner, repo, path, token, session}: getGithubFileProps) {
+    const {data} = await axios.get(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+        headers: {
+            Authorization: token ? `Bearer ${token}` : session?.user.accessToken && `Bearer ${session.user.accessToken}`,
+        }
+    })
+
+    return data.download_url;
+}
+
+
+interface getNotesDataProps {
+    owner: string;
+    repo: string;
+    token?: string;
+    session?: Session;
+}
+
+export async function getNotesData({owner, repo, token, session}: getNotesDataProps): Promise<Post[]> {
+    const tree = await getTree({owner, repo, recursive: true, token, session})
+    const rawFiles = await Promise.all(tree.map((file) => getRaw({owner, repo, path: file.path, token, session})))
+    const posts = await Promise.all(rawFiles.map((raw, index) => rawFileToPost(raw, owner, repo, tree[index].path, token, session)))
     const backLinks = await getAllBackLinks((posts).map((post) => ({slug: post.slug, markdown: post.markdown})))
     const postsWithBackLinks = (posts).map((post) => {
         return {
@@ -112,7 +147,7 @@ export function getSlugFromHref(currSlug: string, href: string) {
     return decodeURI(path.join(...currSlug.split(path.sep).slice(0, -1), href)).replace(/\.md$/, '') */
 }
 
-export async function rawFileToPost(raw: string, owner: string, repo: string, path: string, token?: string): Promise<Post> {
+export async function rawFileToPost(raw: string, owner: string, repo: string, path: string, token?: string, session?: Session): Promise<Post> {
     try {
         let {data, content} = matter(raw)
 
@@ -158,56 +193,35 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             ).substring(0, 500)
         }
 
-        if (!data.date) {
-            const {data: commit} = await axios.get(`/api/commits`, {
-                params: {
-                    owner,
-                    repo,
-                    path,
-                    token
-                },
-            })
-            data.date = commit[0].commit.author.date
-        }
-
-        if (!data.updatedAt) {
-            const {data: commit} = await axios.get(`/api/commits`, {
-                params: {
-                    owner,
-                    repo,
-                    path,
-                    token
-                },
-            })
-            data.updatedAt = commit[0].commit.author.date
-        }
-
-        if (!data.author) {
-            const {data: commit} = await axios.get(`/api/commits`, {
-                params: {
-                    owner,
-                    repo,
-                    path,
-                    token
-                },
-            })
-            data.author = {
-                name: commit[0].commit.author.name,
-                picture: commit[0].author.avatar_url,
+        if (!data.date || !data.updatedAt || !data.author) {
+            const commit = await getCommit({owner, repo, path, token, session})
+            if (!data.date) {
+                data.date = commit[0].commit.author.date
+            }
+            if (!data.updatedAt) {
+                data.updatedAt = commit[0].commit.author.date
+            }
+            if (!data.author) {
+                data.author = {
+                    name: commit[0].commit.author.name,
+                    picture: commit[0].author.avatar_url,
+                }
             }
         }
 
         if (content) {
             // if a link is in the github repository or a relative link, replace it with the raw github link
-            const repositoryLink = /\((?!http(s)?:\/\/)([^\(\)]+)\)/g
+            // const repositoryLink = /\((?!http(s)?:\/\/)([^\(\)]+)\)/g
+            // const repositoryLink = /(!?\[.*]\((?!http(s)?:\/\/)([^\(\)]+)\)|\[\[(?!http(s)?:\/\/)([^\(\)]+)\]\])/g
+            const repositoryLink = /\[.*]\((?!http(s)?:\/\/)([^\(\)]+)\)/g
             const matches = Array.from(content.matchAll(repositoryLink))
             for (const m of matches) {
                 // if the link matches a media file (image, video) in the github repository
-                if (m[2].toLowerCase().match(/.*\.(png|jpg|jpeg|gif|mp4|webm|ogg|mp3|wav)$/g)) {
-                    // console.log(m[2])
+                if (m[2].toLowerCase().match(/.*\.(png|jpg|jpeg|gif|mp4|webm|ogg|mp3|wav|svg)$/g)) {
+                    const originalLink = m[2]
                     // take path into consideration (e.g. /posts/2021-01-01-post-name)
 
-                    /*if (m[2].startsWith('/')) {
+                    if (m[2].startsWith('/')) {
                         m[2] = m[2].substring(1)
                     }
 
@@ -225,14 +239,16 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
 
                     if (m[2].startsWith('.')) {
                         m[2] = m[2].substring(1)
-                    }*/
+                    }
 
+                    // console.log(path)
                     const filePath = path.split('/').slice(0, -1).join('/')
-                    const link = await getImageFromGitHub(owner, repo, `${filePath}/${m[2]}`, token)
-                    if (!link) {
-                        content = content.replace(m[2], '')
-                    } else {
-                        content = content.replace(m[2], link)
+                    try {
+                        const link = await getGithubFile({owner, repo, path: `${filePath}/${m[2]}`, token, session})
+                        content = content.replace(originalLink, link)
+                    } catch (e) {
+                        // console.log(m[2])
+                        content = content.replace(originalLink, '')
                     }
                 }
 
@@ -275,6 +291,7 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
             markdown: content,
         }
     } catch (e) {
+        // console.log(e)
         return {
             slug: path.replace(/\.md$/, ''),
             metadata: {
@@ -299,4 +316,3 @@ export async function rawFileToPost(raw: string, owner: string, repo: string, pa
         }
     }
 }
-

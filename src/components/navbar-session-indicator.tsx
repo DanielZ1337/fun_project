@@ -2,9 +2,8 @@ import {signIn, useSession} from "next-auth/react";
 import {Spinner} from "@/components/icons";
 import {AccountDropdown} from "@/components/account-dropdown";
 import Button from "@/components/ui/button";
-import React, {useEffect} from "react";
+import React from "react";
 import {useToast} from "@/hooks/useToast";
-import {useRouter, useSearchParams} from "next/navigation";
 
 export default function NavbarSessionIndicator() {
     const {data: session, status} = useSession();

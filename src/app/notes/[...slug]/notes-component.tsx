@@ -6,6 +6,7 @@ import React, {useEffect} from "react";
 import ParseMarkdown from "@/components/parse-markdown";
 import {Spinner} from "@/components/icons";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
+import {useToast} from "@/hooks/useToast";
 
 export default function NotesComponent({params}: { params: { slug: string[] } }) {
     const {slug} = params
@@ -14,7 +15,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
     const slugs = slug.slice(2)
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
-    const {data, isLoading} = useNotesData(owner, repo, token ? token : undefined)
+    const {data, isError, isLoading} = useNotesData(owner, repo, token ? token : undefined)
     const router = useRouter()
     const [currentSlug, setCurrentSlug] = React.useState<string | undefined>(undefined)
     const [currentBacklinks, setCurrentBacklinks] = React.useState<{
@@ -22,6 +23,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         excerpt: string,
         slug: string
     }[] | undefined>(undefined)
+    const {toast} = useToast()
 
     if (!owner || !repo) {
         throw new Error('Missing owner or repo')
@@ -29,8 +31,9 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
     useEffect(() => {
         if (slugs.length === 0) {
-            router.push(`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/readme${token ? `?token=${token}` : ""}`)
+            router.push(`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/readme`)
         }
+
         if (!data) return
 
         if (data.filter((note) => note.slug.toLowerCase() === slugs.map((slug) => decodeURI(decodeURI(slug.toLowerCase()))).join("/")).length > 0) {
@@ -49,13 +52,31 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
             }
         }
 
-    }, [currentSlug, data, owner, repo, router, slugs, token])
+    }, [currentSlug, data, owner, repo, router, slugs])
+
+    useEffect(() => {
+        if (isError) {
+            toast({
+                title: "Error loading notes",
+                description: "There was an error loading the notes",
+                duration: 5000,
+            })
+        }
+    }, [isError, toast])
 
     if (isLoading) {
         return (
             <div className={"flex gap-2 flex-col items-center justify-center w-full h-full"}>
                 <Spinner className={"w-10 h-10"}/>
                 <p className={"mt-2 text-sm font-medium text-gray-500"}>Loading...</p>
+            </div>
+        )
+    }
+
+    if (isError) {
+        return (
+            <div className={"flex gap-2 flex-col items-center justify-center w-full h-full"}>
+                <p className={"text-sm font-medium text-gray-500"}>Error loading notes</p>
             </div>
         )
     }

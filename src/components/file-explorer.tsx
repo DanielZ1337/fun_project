@@ -58,10 +58,6 @@ type NestedItem = {
 function RecursiveComponent({data}: any) {
     const [showNested, setShowNested] = useState<NestedItem>({})
 
-    useEffect(() => {
-        console.log(showNested);
-    }, [showNested])
-
     const toggleNested = (name: string | number) => {
         // @ts-ignore
         setShowNested({...showNested, [name]: !showNested[name]})
@@ -87,8 +83,9 @@ function RecursiveComponent({data}: any) {
                             </button>}
                         {/* rendering files */}
                         {parent.type === 'blob' && parent.name.endsWith('.md') && (
-                            <Link href={`/notes/${owner}/${repo}/${parent.path}${token ? `?token=${token}` : ""}`.replace('.md', '')}
-                                  className={"flex gap-2 "}>
+                            <Link
+                                href={`/notes/${owner}/${repo}/${parent.path}${token ? `?token=${token}` : ""}`.replace('.md', '')}
+                                className={"flex gap-2 "}>
                                 <DocumentIcon className={"flex-shrink-0"}/>
                                 {parent.name}
                             </Link>

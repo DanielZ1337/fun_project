@@ -10,7 +10,6 @@ import remarkToc from "remark-toc";
 import remarkMath from "remark-math";
 import CodeBlock from "@/components/code-block";
 import rehypeRaw from "rehype-raw";
-import remarkParse from "remark-parse";
 
 interface ComponentTypes {
     className?: string;
@@ -200,7 +199,7 @@ function ParseMarkdown({
     return (
         <ReactMarkdown
             remarkPlugins={[remarkEmoji, remarkGfm, remarkToc, remarkMath]}
-            rehypePlugins={[rehypeRaw,rehypeAutolinkHeadings, rehypeSlug]}
+            rehypePlugins={[rehypeRaw, rehypeAutolinkHeadings, rehypeSlug]}
             components={components}
         >
             {code}

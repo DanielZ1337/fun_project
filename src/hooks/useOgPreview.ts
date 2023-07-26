@@ -12,6 +12,7 @@ export function useOgPreview(url: string) {
 
         return data as OgPreview
     }, {
+        retry: false,
         refetchOnWindowFocus: false,
     })
 }
