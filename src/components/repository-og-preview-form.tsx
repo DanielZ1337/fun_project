@@ -78,14 +78,15 @@ export default function RepositoryOgPreviewForm() {
                         onClick={(e) => {
                             e.preventDefault()
                             let formUrl = e.currentTarget.form!.url.value
+                            const token = e.currentTarget.form!.token.value
                             if (formUrl === '') return
                             if (!formUrl.startsWith('https') && !formUrl.startsWith('http')) {
                                 formUrl = `http://${formUrl}`
                             }
-                            console.log(formUrl)
+
                             if (formUrl.startsWith('https://github.com') || formUrl.startsWith('http://github.com')) {
                                 const url = new URL(formUrl)
-                                router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}`)
+                                router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}${token ? token && token !== '' : ''}`)
                             }
                         }}
                         tabIndex={4}
