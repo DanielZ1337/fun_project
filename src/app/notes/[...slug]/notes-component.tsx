@@ -31,7 +31,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
     useEffect(() => {
         if (slugs.length === 0) {
-            router.push(`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/readme`)
+            router.push(`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/readme${token ? `?token=${token}` : ""}`)
         }
 
         if (!data) return
