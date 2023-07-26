@@ -10,6 +10,8 @@ import Link from "next/link";
 import NotesNavigationMenu from "@/components/notes-navigation-menu";
 import ParseMarkdown from "@/components/parse-markdown";
 import PostHeader from "@/components/post-header";
+import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle} from "@/components/ui/dialog";
+import Button from "@/components/ui/button";
 
 export default function NotesComponent({params}: { params: { slug: string[] } }) {
     const {slug} = params
@@ -33,6 +35,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         excerpt: string,
         slug: string
     }[] | undefined>(undefined)
+    const dialogInputRef = React.useRef<HTMLInputElement>(null)
 
     if (!owner || !repo) {
         throw new Error('Missing owner or repo')
@@ -41,7 +44,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
     useEffect(() => {
         if (noteSearch === "" || isError || !data) return
         // find notes that match the search query fastest way possible
-        const results = data.filter((note) => note.metadata.title.toLowerCase().includes(noteSearch.toLowerCase()) || note.markdown.toLowerCase().includes(noteSearch.toLowerCase())).map((note) => {
+        const results = data.filter((note) => note.metadata.title.toLowerCase().includes(noteSearch.toLowerCase()) || note.slug.toLowerCase().includes(noteSearch.toLowerCase())).map((note) => {
             return {
                 title: note.metadata.title,
                 excerpt: note.markdown,
@@ -117,30 +120,47 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
     return (
         <>
             <Input tabIndex={1} autoFocus={false} type="text" value={noteSearch}
-                   onChange={(e) => setNoteSearch(e.target.value)} className={"mb-4"}/>
-            {noteSearchResults && noteSearchResults.length > 0 &&
-                <div className={"flex flex-col gap-2"}>
-                    {noteSearchResults.map((note) => {
-                        return (
-                            <Link
-                                href={`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/${note.slug}${token ? `?token=${token}` : ""}`}
-                                key={note.slug}><p className={"text-sm font-medium text-gray-500"}>{note.title}</p>
-                            </Link>
-                        )
-                    })}
-                </div>
-            }
+                   onChange={(e) => {
+                       setNoteSearch(e.target.value)
+                       dialogInputRef.current?.focus()
+                   }} className={"mb-4"}/>
+
+            <Dialog open={noteSearch.length > 0} onOpenChange={() => {
+                setNoteSearch("")
+            }}>
+                <DialogContent className="sm:max-w-[425px] flex flex-col max-h-[66%] ">
+                    <DialogHeader>
+                        <DialogTitle>Search for notes</DialogTitle>
+                    </DialogHeader>
+                    <Input ref={dialogInputRef} tabIndex={1} autoFocus={true} type="text" value={noteSearch}
+                           onChange={(e) => setNoteSearch(e.target.value)} className={"mb-4"}/>
+                    <div className={"flex flex-col gap-2 overflow-y-auto break-all"}>
+                        {noteSearchResults && noteSearchResults.length > 0 && noteSearchResults.map((note) => {
+                            return (
+                                <Link
+                                    href={`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/${note.slug}${token ? `?token=${token}` : ""}`}
+                                    key={note.slug}><p
+                                    className={"text-sm font-medium text-gray-500 hover:text-current"}>{note.title}</p>
+                                </Link>
+                            )
+                        })}
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             <div className={"flex divide-x justify-between"}>
                 <div className={"w-full pr-4"}>
                     {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
                         <PostHeader post={data.filter((note) => note.slug === currentSlug)[0]}/>}
                     <div className={"mt-4"}>
                         {data && data.filter((note) => note.slug === currentSlug).length === 0 &&
-                            <div className={"flex gap-2 flex-col items-center justify-center w-full h-full mt-8"}>
+                            <div
+                                className={"flex gap-2 flex-col items-center justify-center w-full h-full mt-8"}>
                                 <p className={"text-sm font-medium text-gray-500"}>Note not found</p>
                             </div>}
                         {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
-                            <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>}
+                            <ParseMarkdown
+                                code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>}
                     </div>
                 </div>
                 <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo}

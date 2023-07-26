@@ -47,7 +47,6 @@ export async function GET(req: Request) {
             }
         })
 
-        console.log(res)
         if (res.status !== 200) {
             return new Response("Error fetching repo", {status: res.status});
         }
