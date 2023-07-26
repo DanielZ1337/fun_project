@@ -35,6 +35,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         excerpt: string,
         slug: string
     }[] | undefined>(undefined)
+    const defaultInputRef = React.useRef<HTMLInputElement>(null)
     const dialogInputRef = React.useRef<HTMLInputElement>(null)
 
     if (!owner || !repo) {
@@ -119,7 +120,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
     return (
         <>
-            <Input tabIndex={1} autoFocus={false} type="text" value={noteSearch}
+            <Input ref={defaultInputRef} tabIndex={1} autoFocus={false} type="text" value={noteSearch}
                    onChange={(e) => {
                        setNoteSearch(e.target.value)
                        dialogInputRef.current?.focus()
@@ -127,6 +128,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
 
             <Dialog open={noteSearch.length > 0} onOpenChange={() => {
                 setNoteSearch("")
+                defaultInputRef.current?.focus()
             }}>
                 <DialogContent className="sm:max-w-[425px] flex flex-col max-h-[66%] ">
                     <DialogHeader>
