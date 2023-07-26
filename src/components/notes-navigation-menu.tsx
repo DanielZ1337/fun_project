@@ -33,7 +33,7 @@ export default function NotesNavigationMenu({backlinks, owner, repo, token}: {
     }, [data])
 
     return (
-        <Accordion type='multiple'>
+        <Accordion type='multiple' className={"w-full px-4 max-w-[33%]"}>
             <AccordionItem value={'backlinks'}>
                 <AccordionTrigger>Backlinks</AccordionTrigger>
                 <AccordionContent>

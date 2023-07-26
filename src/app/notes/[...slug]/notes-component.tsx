@@ -3,10 +3,13 @@
 import {useRouter, useSearchParams} from "next/navigation";
 import {useNotesData} from "@/hooks/useNotesData";
 import React, {useEffect} from "react";
-import ParseMarkdown from "@/components/parse-markdown";
 import {Spinner} from "@/components/icons";
-import NotesNavigationMenu from "@/components/notes-navigation-menu";
 import {useToast} from "@/hooks/useToast";
+import Input from "@/components/ui/input";
+import Link from "next/link";
+import NotesNavigationMenu from "@/components/notes-navigation-menu";
+import ParseMarkdown from "@/components/parse-markdown";
+import PostHeader from "@/components/post-header";
 
 export default function NotesComponent({params}: { params: { slug: string[] } }) {
     const {slug} = params
@@ -24,10 +27,31 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         slug: string
     }[] | undefined>(undefined)
     const {toast} = useToast()
+    const [noteSearch, setNoteSearch] = React.useState<string>("")
+    const [noteSearchResults, setNoteSearchResults] = React.useState<{
+        title: string,
+        excerpt: string,
+        slug: string
+    }[] | undefined>(undefined)
 
     if (!owner || !repo) {
         throw new Error('Missing owner or repo')
     }
+
+    useEffect(() => {
+        if (noteSearch === "" || isError || !data) return
+        // find notes that match the search query fastest way possible
+        const results = data.filter((note) => note.metadata.title.toLowerCase().includes(noteSearch.toLowerCase()) || note.markdown.toLowerCase().includes(noteSearch.toLowerCase())).map((note) => {
+            return {
+                title: note.metadata.title,
+                excerpt: note.markdown,
+                slug: note.slug
+            }
+        })
+        setNoteSearchResults(results)
+
+
+    }, [data, isError, noteSearch])
 
     useEffect(() => {
         if (slugs.length === 0) {
@@ -52,7 +76,7 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
             }
         }
 
-    }, [currentSlug, data, owner, repo, router, slugs])
+    }, [currentSlug, data, owner, repo, router, slugs, token])
 
     useEffect(() => {
         if (slugs.length === 0) return
@@ -82,19 +106,48 @@ export default function NotesComponent({params}: { params: { slug: string[] } })
         )
     }
 
+    if (!data) {
+        return (
+            <div className={"flex gap-2 flex-col items-center justify-center w-full h-full"}>
+                <p className={"text-sm font-medium text-gray-500"}>No notes found</p>
+            </div>
+        )
+    }
+
     return (
         <>
-            <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo}
-                                 owner={owner}/>
-            {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
-                <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>
-            }
-            {data && data.filter((note) => note.slug === currentSlug).length === 0 &&
-                <div className={"flex gap-2 flex-col items-center justify-center w-full h-full mt-8"}>
-                    <p className={"text-sm font-medium text-gray-500"}>Note not found</p>
+            <Input tabIndex={1} autoFocus={false} type="text" value={noteSearch}
+                   onChange={(e) => setNoteSearch(e.target.value)} className={"mb-4"}/>
+            {noteSearchResults && noteSearchResults.length > 0 &&
+                <div className={"flex flex-col gap-2"}>
+                    {noteSearchResults.map((note) => {
+                        return (
+                            <Link
+                                href={`/notes/${owner.toLowerCase()}/${repo.toLowerCase()}/${note.slug}${token ? `?token=${token}` : ""}`}
+                                key={note.slug}><p className={"text-sm font-medium text-gray-500"}>{note.title}</p>
+                            </Link>
+                        )
+                    })}
                 </div>
             }
-            {/*<NotesGraph posts={data} owner={owner} repo={repo} token={token ? token : undefined}/>*/}
+            <div className={"flex divide-x justify-between"}>
+                <div className={"w-full pr-4"}>
+                    {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
+                        <PostHeader post={data.filter((note) => note.slug === currentSlug)[0]}/>}
+                    <div className={"mt-4"}>
+                        {data && data.filter((note) => note.slug === currentSlug).length === 0 &&
+                            <div className={"flex gap-2 flex-col items-center justify-center w-full h-full mt-8"}>
+                                <p className={"text-sm font-medium text-gray-500"}>Note not found</p>
+                            </div>}
+                        {currentSlug && data && data.filter((note) => note.slug === currentSlug).length > 0 &&
+                            <ParseMarkdown code={data.filter((note) => note.slug === currentSlug)[0].markdown}/>}
+                    </div>
+                </div>
+                <NotesNavigationMenu backlinks={currentBacklinks} token={token ? token : undefined} repo={repo}
+                                     owner={owner}/>
+            </div>
+            {/*<NotesGraph posts={data} owner={owner} repo={repo} token={token ? token : undefined}/>*/
+            }
         </>
     )
 }

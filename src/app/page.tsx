@@ -3,7 +3,7 @@ import RepositoryForm from "@/components/ui/repository-form";
 
 export default async function Home() {
     return (
-        <div className={'text-center flex flex-col flex-1 items-center justify-center gap-6'}>
+        <div className={'text-center flex flex-col flex-1 items-center justify-center gap-6 xl:mt-16'}>
             <div>
                 <div className={'flex justify-center gap-4 items-center mb-8'}>
                     <GitHubIcon className={'w-24 h-24'}/>
