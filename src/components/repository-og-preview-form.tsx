@@ -86,7 +86,7 @@ export default function RepositoryOgPreviewForm() {
 
                             if (formUrl.startsWith('https://github.com') || formUrl.startsWith('http://github.com')) {
                                 const url = new URL(formUrl)
-                                router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}${token && token !== '' ? token : ''}`)
+                                router.push(`/notes/${url.pathname.slice(1).split('/')[0]}/${url.pathname.slice(1).split('/')[1]}${token && token !== '' ? `?token=${token}` : ''}`)
                             }
                         }}
                         tabIndex={4}
