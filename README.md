@@ -1,34 +1,90 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Git Markdown Notes Reader
+
+Welcome to Git Markdown Notes Reader! This repository hosts a collection of tools, components, and utilities designed to enhance your experience of reading and managing Git-backed Markdown notes. Explore the features offered by this project to streamline your note-taking and organization.
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Scripts](#scripts)
+- [Dependencies](#dependencies)
+- [Dev Dependencies](#dev-dependencies)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Introduction
+
+Git Markdown Notes Reader is a carefully curated assortment of tools and utilities that aim to elevate your interaction with Git-backed Markdown notes. Whether you're compiling a personal knowledge base, maintaining technical documentation, or simply jotting down ideas, you'll find these resources invaluable.
 
 ## Getting Started
 
-First, run the development server:
+To embark on your journey with Git Markdown Notes Reader, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+1. Clone this repository to your local machine.
+2. Navigate to the root directory of the project.
+3. Utilize your preferred package manager to install the necessary dependencies. Run:
+
+```sh
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Discover the diverse features and components within the project.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Git Markdown Notes Reader offers an array of tools and utilities that can seamlessly integrate into your note-keeping and management workflow. Noteworthy features include:
 
-## Learn More
+- Engaging components from @radix-ui for crafting interactive UI elements.
+- @next-auth for managing authentication and user-related functionalities.
+- @tanstack/react-query to streamline efficient data fetching.
+- A selection of utilities for handling Markdown content, syntax highlighting, and more.
+Feel at liberty to explore the project's source code and incorporate the components and utilities that align with your project's requisites.
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The following scripts facilitate the management of the project:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **\`devT`**: Launch the development server with turbo mode activated.
+- **\`dev`**: Initiate the development server.
+- **\`build`**: Compile the project for production deployment.
+- **\`start`**: Commence the production server.
+- **\`lint`**: Execute linting checks.
 
-## Deploy on Vercel
+You can trigger these scripts using:
+```sh
+npm run <script-name>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Dependencies
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Git Markdown Notes Reader relies on the subsequent dependencies:
+
+- List of dependencies...
+For comprehensive insights into the dependencies and their respective versions, kindly refer to the **\`package.json`** file.
+
+## Dev Dependencies
+
+The project's development environment is enriched with the subsequent dev dependencies:
+
+- List of dev dependencies...
+These dev dependencies are instrumental during the development phase and aren't imperative for the production deployment of the project.
+
+## Contributing
+
+Contributions to Git Markdown Notes Reader are warmly welcomed! If you're eager to contribute, adhere to these guidelines:
+
+1. Fork the repository.
+2. Generate a fresh branch for your feature implementation or bug fix.
+3. Introduce your modifications and commit them.
+4. Push the changes to your fork.
+5. Open a pull request in this repository, complete with a detailed exposition of your alterations.
+
+Your contributions are pivotal in enhancing this project's brilliance!
+
+## License
+This project operates under the MIT License. You're granted the liberty to utilize, modify, and distribute the code in accordance with the license's stipulations.
+
+---
+
+Embark on an enriching voyage through Git Markdown Notes Reader! Should you possess queries, ideas, or feedback, don't hesitate to get in touch. Your exploration is bound to be rewarding!
