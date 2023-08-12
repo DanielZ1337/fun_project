@@ -35,9 +35,9 @@ npm install
 
 Git Markdown Notes Reader offers an array of tools and utilities that can seamlessly integrate into your note-keeping and management workflow. Noteworthy features include:
 
-- Engaging components from @radix-ui for crafting interactive UI elements.
-- @next-auth for managing authentication and user-related functionalities.
-- @tanstack/react-query to streamline efficient data fetching.
+- Engaging components from **@radix-ui** for crafting interactive UI elements.
+- **@next-auth** for managing authentication and user-related functionalities.
+- **@tanstack/react-query** to streamline efficient data fetching.
 - A selection of utilities for handling Markdown content, syntax highlighting, and more.
 Feel at liberty to explore the project's source code and incorporate the components and utilities that align with your project's requisites.
 
